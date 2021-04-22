@@ -4,5 +4,6 @@
 @import "{{ site.theme }}";
 
 body {
-  tab-size: 4
+  -moz-tab-size: 4;
+  tab-size: 4;
 }
