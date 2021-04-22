@@ -113,7 +113,7 @@ public class Startup
 
 Note that because the SQL script we are running is Data Definition Language rather thans standard SQL, we can't use Sql parameters pass through the DB name to create to the script (.NET doesn't support it). So to protect against SQL injection attacks, incase anyone manages to get malicious code into our connection string database name, we check the database name with `CheckDbName`.
 
-##Addendum: Autosetting your connection string based on your Git branch
+## Addendum: Autosetting your connection string based on your Git branch
 
 Most dev teams need to create separate environments for their git branches, where the application is hosted based on the branched code with a separate branch database, so testers, product owners and any other stakeholders can see a working demo of the latest feature.
 
