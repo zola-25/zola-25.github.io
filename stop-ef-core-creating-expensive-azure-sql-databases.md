@@ -1,6 +1,7 @@
 ---
 title: "Stop EF Core creating expensive Azure SQL Database configurations on start up"
 permalink: /post/stop-ef-core-creating-expensive-azure-sql-databases
+date: 2020-05-07
 ---
 
 
@@ -12,7 +13,7 @@ However, the default Azure database configuration that EF Core will create is th
 
 Here's something that you can call in your application startup that will avoid that. It checks your connection string for the database you are trying to connect to, and if it doesn't exist, creates it as a Standard configuration that is priced at the more managable £13.98/month. In my experience Basic is sometimes too slow even for development, so the Standard option is usually my first choice.
 
-```
+```cs 
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -67,7 +68,7 @@ public class DevelopmentDatabaseCreator : IDevelopmentDatabaseCreator
 
 Then, in your Startup.cs file if you're running ASP.NET Core, you can make sure it's always called before you call `dbContext.Database.Migrate()` or `dbContext.Database.EnsureCreated()`:
 
-```
+```cs
 public class Startup
 {
 	public Startup(IConfiguration configuration, IHostingEnvironment appEnv)
@@ -121,11 +122,11 @@ Devs constantly switching branches when debugging locally is part of life, but w
 
 If you're running Git, here's a way in ASP.NET Core to automatically set your connection string based on what branch you are set to. Usually for consistency dev branch DBs will be named based on the branch name, so if you you know your git branch name you know your dev branch environment DB.
 
-[Disclaimer: I'm pretty agnostic when it comes to version control systems, especially the merits of Git vs SVN, I don't think Git is all it's cracked up to be, but that's a debate for another time. Most teams have moved towards Git so I've moved with them :) ]
+(Disclaimer: I'm pretty agnostic when it comes to version control systems, especially the merits of Git vs SVN, I don't think Git is all it's cracked up to be, but that's a debate for another time. Most teams have moved towards Git so I've moved with them :) )
 
-The cruicial part is calling git from the command line through your application to get the git branch name, which I've copied from this stack overflow answer that deserves more upvotes: https://stackoverflow.com/questions/48421697/get-name-of-branch-into-code
+The cruicial part is calling git from the command line through your application to get the git branch name, which I've copied from [this stack overflow answer](https://stackoverflow.com/questions/48421697/get-name-of-branch-into-code) that deserves more upvotes: 
 
-```
+```cs 
 
 using System;
 using System.Diagnostics;
@@ -172,7 +173,7 @@ public class GitBranchFinder : IGitBranchFinder
 
 So then we can encapsulate some logic to get the application connection string to use in Startup.cs, that will always provide us with the right connection string based on our environment. In cloud hosted production and development environments we are likely to have the connection string specified in an app setting or environment variable, and we wouldn't (or couldn't) run git.exe from a hosted environment. So we check if there is any connection string setting specified, and if not, and we're running in a local environment, we work out the connection string automatically based on the `GitBranchFinder` we defined above. It's often convenient to define a 'Local' environment, which means a dev debugging the code locally, and a Development environment, which means a hosted development branch environment:
 
-```
+```cs 
 using Enis.Domain.Abstractions.StartupServices;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -220,7 +221,7 @@ public class ConnectionStringBuilder : IConnectionStringBuilder
 
 Then our Startup.cs file might look more like this:
 
-```
+```cs 
 public class Startup
 {
 	public Startup(IConfiguration configuration, IHostingEnvironment appEnv)
@@ -273,5 +274,5 @@ public class Startup
 }
 ```
 
-Full code here: https://gist.github.com/zola-25/2a006d269efa309d312655f1256fb2a5
+[Full code here](https://gist.github.com/zola-25/2a006d269efa309d312655f1256fb2a5)
 
