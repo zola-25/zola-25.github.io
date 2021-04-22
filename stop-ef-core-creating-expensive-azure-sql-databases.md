@@ -10,7 +10,7 @@ If you're using EF Core as your ORM and you automatically run migrations on star
 
 However, the default Azure database configuration that EF Core will create is the vCore General Purpose Generation 5 which comes out at 320+ £/month!
 
-Here's something that you can call in your application startup that will avoid that. It checks your connection string for the database you are trying to connect to, and if it doesn't exist, creates it as a Standard configuration that is priced at the more managable £13.98/month. In my experience Basic is sometimes too slow even for development, so the Standard option is usually my first choice. 
+Here's something that you can call in your application startup that will avoid that. It checks your connection string for the database you are trying to connect to, and if it doesn't exist, creates it as a Standard configuration that is priced at the more managable £13.98/month. In my experience Basic is sometimes too slow even for development, so the Standard option is usually my first choice.  
 
 ```cs 
 using System.Data.SqlClient;
