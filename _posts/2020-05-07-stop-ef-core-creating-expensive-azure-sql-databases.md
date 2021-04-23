@@ -1,8 +1,11 @@
 ---
 title: "Stop EF Core creating expensive Azure SQL Database configurations on start up"
+layout: post
 permalink: /post/stop-ef-core-creating-expensive-azure-sql-databases
-date: 2020-05-07
+tags: ef-core azure sql git
 ---
+
+# Stop EF Core creating expensive Azure SQL Database configurations on start up
 
 If you're developing an application that uses Azure SQL Databases for development and testing, you usually just want the bare minimum configuration, the Basic or Standard options, so you don't waste cash.
 
