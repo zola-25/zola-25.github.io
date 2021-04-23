@@ -4,12 +4,6 @@ permalink: /post/stop-ef-core-creating-expensive-azure-sql-databases
 tags: ef-core azure sql git
 ---
 
-<div style="text-align: center;"> 
-# Stop EF Core creating expensive Azure SQL Database configurations on start up
-
-{{ page.date | date: '%B %d, %Y' }}
-</div>
-
 If you're developing an application that uses Azure SQL Databases for development and testing, you usually just want the bare minimum configuration, the Basic or Standard options, so you don't waste cash.
 
 If you're using EF Core as your ORM and you automatically run migrations on startup, if it doesn't find the database on the server specified in your connection string, it will automatically create the database for you. This is great if you're working on a development branch of your codebase and you need a separate database for your work.
