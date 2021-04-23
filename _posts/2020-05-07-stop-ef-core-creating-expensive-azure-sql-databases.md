@@ -4,7 +4,11 @@ permalink: /post/stop-ef-core-creating-expensive-azure-sql-databases
 tags: ef-core azure sql git
 ---
 
+<div style="text-align: center;"> 
 # Stop EF Core creating expensive Azure SQL Database configurations on start up
+
+{{ page.date | date: '%B %d, %Y' }}
+</div>
 
 If you're developing an application that uses Azure SQL Databases for development and testing, you usually just want the bare minimum configuration, the Basic or Standard options, so you don't waste cash.
 
