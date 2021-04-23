@@ -12,7 +12,7 @@ However, the default Azure database configuration that EF Core will create is th
 
 Here's something that you can call in your application startup that will avoid that. It checks your connection string for the database you are trying to connect to, and if it doesn't exist, creates it as a Standard configuration that is priced at the more managable £13.98/month. In my experience Basic is sometimes too slow even for development, so the Standard option is usually my first choice.  
 
-```cs 
+```csharp
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -67,7 +67,7 @@ public class DevelopmentDatabaseCreator : IDevelopmentDatabaseCreator
 
 Then, in your Startup.cs file if you're running ASP.NET Core, you can make sure it's always called before you call `dbContext.Database.Migrate()` or `dbContext.Database.EnsureCreated()`:
 
-```cs
+```csharp
 public class Startup
 {
 	public Startup(IConfiguration configuration, IHostingEnvironment appEnv)
@@ -125,7 +125,7 @@ If you're running Git, here's a way in ASP.NET Core to automatically set your co
 
 The cruicial part is calling git from the command line through your application to get the git branch name, which I've copied from [this stack overflow answer](https://stackoverflow.com/questions/48421697/get-name-of-branch-into-code) that deserves more upvotes: 
 
-```cs 
+```csharp
 
 using System;
 using System.Diagnostics;
@@ -172,7 +172,7 @@ public class GitBranchFinder : IGitBranchFinder
 
 So then we can encapsulate some logic to get the application connection string to use in Startup.cs, that will always provide us with the right connection string based on our environment. In cloud hosted production and development environments we are likely to have the connection string specified in an app setting or environment variable, and we wouldn't (or couldn't) run git.exe from a hosted environment. So we check if there is any connection string setting specified, and if not, and we're running in a local environment, we work out the connection string automatically based on the `GitBranchFinder` we defined above. It's often convenient to define a 'Local' environment, which means a dev debugging the code locally, and a Development environment, which means a hosted development branch environment:
 
-```cs 
+```csharp
 using Enis.Domain.Abstractions.StartupServices;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -220,7 +220,7 @@ public class ConnectionStringBuilder : IConnectionStringBuilder
 
 Then our Startup.cs file might look more like this:
 
-```cs 
+```csharp 
 public class Startup
 {
 	public Startup(IConfiguration configuration, IHostingEnvironment appEnv)
