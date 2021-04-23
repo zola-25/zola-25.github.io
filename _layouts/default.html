@@ -44,6 +44,13 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
+        
+      <div style="text-align: center;"> 
+        <h1>page.title</h1>
+        {{ page.date | date: '%B %d, %Y' }}
+      </div>
+
+        
         {{ content }}
       </section>
     </div>
