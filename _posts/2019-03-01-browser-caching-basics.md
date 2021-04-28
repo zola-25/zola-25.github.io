@@ -1,3 +1,9 @@
+---
+title: "Browser Caching Basics"
+permalink: /post/browser-caching-basics
+tags: browser caching cache chrome firefox edge
+---
+
 Browsers cache web content to deliver previously visited pages faster.
 
 This caching can be controlled by the web server with the HTTP header cache-control (sometimes also using the header e-tag), as explained later.
