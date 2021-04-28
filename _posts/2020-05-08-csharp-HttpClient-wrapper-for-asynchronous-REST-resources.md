@@ -1,5 +1,5 @@
 ---
-title: "Stop EF Core creating expensive Azure SQL Database configurations on start up"
+title: "C# HttpClient Wrapper for Asynchronous REST resources"
 permalink: /post/csharp-HttpClient-wrapper-for-asynchronous-REST-resources
 tags: C# HttpClient Asynchronous REST
 ---
