@@ -26,8 +26,7 @@ The key to allowing this pattern in R Plumber is to make use of the [future](htt
 
 Normally our R Plumber GET request endpoint for a long running analysis might look something like this:
 
-{% raw %}
-<pre><code class="language-r">
+'''r
   # plumber_synchronous.R
 
   source("./analysis.R")
@@ -43,16 +42,14 @@ Normally our R Plumber GET request endpoint for a long running analysis might lo
     return(analysisResult)
 
   }
-</code></pre>
-
-{% endraw %}
+'''
 
 Given that runAnalysis takes a long time, this stops any other requests being handled until it has finished.
 
 Instead we replace this GET request handler with a POST request handler that creates a future with the work of running the analysis.
 
-{% raw %}
-<pre><code class="language-r">
+
+'''r
   # plumber.R
   require(future)
   require(uuid)
@@ -116,15 +113,13 @@ Instead we replace this GET request handler with a POST request handler that cre
     return(list(message=paste0("This resource is being created. Keep checking back at GET ", queueLocation, ", when completed you will be redirected to the completed resource"),
                 location=queueLocation))
   }
-</code></pre>
-
-{% endraw %}
+'''
 
 The POST request handler gives each analysis request a unique GUID/UUID, and keeps track of the executing analyses by storing them in a global variable, executingFutures.
 
 It then responds with a 202 status code, used [for indicating that request has been accepted for processing, but the processing has not been completed](https://restfulapi.net/http-status-202-accepted/), and with the location which the client can keep checking to get the status of the executing analysis.
 
-<pre><code class="language-r">
+'''r
 #' @serializer unboxedJSON
 #' @get /queuedResource/<uniqueId>/status
 function(res, uniqueId){
@@ -178,13 +173,13 @@ resourceNotFoundResponse <- function(res, uniqueId) {
   return(list(message=paste0("Resource with ID ", uniqueId, " not found. Cache may have expired, please try recreating the resource.")
     ))
 }
-</code></pre>
+'''
 
 Because each analysis has been given a unique ID, the client can check the status of it by calling GET /queuedResource/{uniqueId}/status.
 
 If the future is still executing, it replies back with the same 202 status, so the client knows to keep checking back. If it has completed, it moves the future off the executingFutures list and on to the completedFutures list. It then returns a 303 redirect status code, along setting the location head with the location of the completed resource. Finally, we define the endpoint where completed resources can be accessed:
 
-<pre><code class="language-r">
+'''r
 #' @serializer unboxedJSON
 #' @get /resource/<uniqueId>/result
 function(res, uniqueId){
@@ -203,7 +198,7 @@ function(res, uniqueId){
   
   return (value(f)$result)
 }
-</code></pre>
+'''
 
 And that’s it, an Asynchronous REST API with R Plumber. Note that I said this API serves concurrent requests - this isn’t strictly true, as the R Plumber request handling is still single threaded and can only serve one request at a time. But because each request returns very quickly as it only has to either start the future, return the future status or return the future results, the blocking time is much shorter compared to running the analysis synchronously.
 
