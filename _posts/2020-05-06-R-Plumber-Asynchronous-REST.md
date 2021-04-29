@@ -32,9 +32,9 @@ Normally our R Plumber GET request endpoint for a long running analysis might lo
   source("./analysis.R")
 
 
-  #' Get then analysis result for the provided <analysisId>
-  #' @serializer unboxedJSON
-  #' @get /analysis/<analysisId>/result
+  #\' Get then analysis result for the provided <analysisId>
+  #\' @serializer unboxedJSON
+  #\' @get /analysis/<analysisId>/result
   function(analysisId){
 
     analysisResult <- runAnalysis(analysisId)
