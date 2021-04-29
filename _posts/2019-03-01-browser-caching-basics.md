@@ -14,7 +14,7 @@ If even the last-modified-header is not set, the resource may or may not be cach
 
 You can verify this with a simple action method in any ASP.NET Core site. Set the method to return some content and add a HTML link tag to the resource:
 
-```aspx
+```csharp
 [Route("cacheTest.css")]
 public IActionResult CacheTest()
 {
@@ -22,8 +22,9 @@ public IActionResult CacheTest()
     return Content("Some content");
 }
 ```
+
 ```xhtml
-<link rel="stylesheet" href="~/cacheTest.css" />
+&lt;link rel="stylesheet" href="~/cacheTest.css" /&gt;
 ```
 
 Open the page in chrome while viewing the Network developer tab, making sure Disable Cache is unticked. Reload the page or click on another page within your site and you can see the regular static files are loaded from the cache, but our cacheTest.css is not:
