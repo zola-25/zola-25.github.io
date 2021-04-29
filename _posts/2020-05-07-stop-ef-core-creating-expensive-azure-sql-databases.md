@@ -63,7 +63,7 @@ public class DevelopmentDatabaseCreator : IDevelopmentDatabaseCreator
 		}
 	}
 }
-</pre></code>
+</code></pre>
 
 Then, in your Startup.cs file if you're running ASP.NET Core, you can make sure it's always called before you call `dbContext.Database.Migrate()` or `dbContext.Database.EnsureCreated()`:
 
@@ -109,7 +109,7 @@ public class Startup
 
 }
 
-</pre></code>
+</code></pre>
 
 Note that because the SQL script we are running is Data Definition Language rather thans standard SQL, we can't use Sql parameters pass through the DB name to create to the script (.NET doesn't support it). So to protect against SQL injection attacks, incase anyone manages to get malicious code into our connection string database name, we check the database name with `CheckDbName`.
 
@@ -165,7 +165,7 @@ public class GitBranchFinder : IGitBranchFinder
 	}
 }
 
-</pre></code>
+</code></pre>
 
 `GetBranchNameLastPart` is to deal with the fact that often Git branches are prefixed with feature/ or bug/ with the forward slash which is an invalid character for a SQL DB name, so we only use the last part for the DB name.
 
@@ -216,7 +216,7 @@ public class ConnectionStringBuilder : IConnectionStringBuilder
 			$"Server=tcp:[*your Azure Dev SQL Server*].database.windows.net,1433;Initial Catalog=[*your dev DB prefix convention*]-{branchNameLastPart};Persist Security Info=False;User ID=[*your-user-id*];Password={password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";            
 	}
 }
-</pre></code>
+</code></pre>
 
 Then our Startup.cs file might look more like this:
 
@@ -271,7 +271,7 @@ public class Startup
 		
 	}
 }
-</pre></code>
+</code></pre>
 
 [Full code here](https://gist.github.com/zola-25/2a006d269efa309d312655f1256fb2a5)
 
