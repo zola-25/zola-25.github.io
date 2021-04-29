@@ -21,11 +21,11 @@ public IActionResult CacheTest()
     Response.ContentType = "text/css";
     return Content("Some content");
 }
-</pre></code>
+</code></pre>
 
 <pre><code class="language-html">
 <link rel="stylesheet" href="~/cacheTest.css" />
-</pre></code>
+</code></pre>
 
 Open the page in chrome while viewing the Network developer tab, making sure Disable Cache is unticked. Reload the page or click on another page within your site and you can see the regular static files are loaded from the cache, but our cacheTest.css is not:
 
