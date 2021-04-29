@@ -1,9 +1,7 @@
-<h1 class="entry-title">
-    <a href="{{ root_url }}{{ page.url }}">{{ page.title }}</a>
-</h1>
-{% if post.title %}
-  <h1 class="entry-title">
-    <a href="{{ root_url }}{{ post.url }}">{{ post.title }}</a>
-  </h1>      
-{% endif %}
-<div class="entry-content">{{ content }}</div>
+<div style="text-align: center;"> 
+  <h2>{{ page.title }}</h2>
+  {{ page.date | date: '%B %d, %Y' }}
+</div>
+
+
+{{ content }}
