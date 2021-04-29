@@ -39,7 +39,7 @@ public void ConfigureServices(IServiceCollection services)
 
 	//...
 }
-</pre></code>
+</code></pre>
 
 And then a standard HTTP Request Wrapper class with one generic async GET request method might look something like this:
   
@@ -69,7 +69,7 @@ public class AnalyticsHttpWrapper : IAnalyticsHttpWrapper
 		return JsonConvert.DeserializeObject<T>(response);
 	}
 }
-</pre></code>
+</code></pre>
 
 (An example I adapted from this [stackoverflow answer](https://stackoverflow.com/a/54597915/3910619))
 
@@ -90,7 +90,7 @@ public class MyClientClass
 		return await _analyticsHttpWrapper.Get<MyAnalyticsResults>($"/analysis/{analysisId}/result");
 	}
 }
-</pre></code>
+</code></pre>
 
 All well and good. But when we move our API to an asynchronous request-response pattern, `async Task<T> Get<T>(string path)` won’t work as implemented. How can we change our `AnalyticsHttpWrapper` class so that it works with the new pattern, while minimizing the changes needed to our client classes, such as `MyClientClass`?
 
@@ -199,7 +199,7 @@ public class AnalyticsHttpException : Exception
 	}
 
 }
-</pre></code>
+</code></pre>
 
 Our `Task<T> Get<T>(string path)` becomes `Task<T> GetAsynchronous<T>(string path)`. In `PollUntilResourceCreated`, we first create the resource and expect a 202 response, with the status location in the location header. Then we keep making GET requests to the this location every 2 seconds, until we get a different response from 202 Accepted. We check the response is a success, and deserialize the object as normal and return it to the client.
 
