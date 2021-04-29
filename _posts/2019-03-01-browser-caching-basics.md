@@ -29,7 +29,7 @@ public IActionResult CacheTest()
 
 Open the page in chrome while viewing the Network developer tab, making sure Disable Cache is unticked. Reload the page or click on another page within your site and you can see the regular static files are loaded from the cache, but our cacheTest.css is not:
 
-![Chrome Network Tab](/img/posts/browser-caching-basics/chrome_network_tab.png)
+![Chrome Network Tab](/assets/img/chrome_network.png)
 
 
 This is because ASP.NET automatically adds a last-modified-by header for normal static files in the wwwroot folder, but not for files created dynamically with the Content() method.
@@ -40,7 +40,7 @@ The standard way the server controlling how the browser caches a resource is wit
 
 A server can tell the browser to cache a resource and use it for a certain period of a time, by returning a response with cache-control max-age set:
 
-![Cache Control Max Age Header](/img/posts/browser-caching-basics/cache-control-max-age-header.png)
+![Cache Control Max Age Header](/assets/img/chrome_cache_control_header.png)
 
 max-age is a value in seconds that the resource may be cached for. If a new request is made for the same resource within the max-age, the browser will use the cached resource.
 
