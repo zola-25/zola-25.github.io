@@ -5,7 +5,7 @@ tags: R plumber REST asynchronous
 ---
 
 <div style="text-align: center">
-  <h3> Serve concurrent requests with R plumber without creating multiple instances with complex load balancing solutions <h3>
+  <h3> Serve concurrent requests with R plumber without creating multiple instances with complex load balancing solutions </h3>
 </div>
 
 ### The single-threading Problem
