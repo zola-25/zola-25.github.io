@@ -21,7 +21,7 @@ public IActionResult CacheTest()
     Response.ContentType = "text/css";
     return Content("Some content");
 }
-</code></pre>
+'''
 
 '''xhtml
 <link rel="stylesheet" href="~/cacheTest.css" />
