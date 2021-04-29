@@ -16,7 +16,7 @@
     <meta name="theme-color" content="#ffffff">
     
     <link rel="stylesheet" type="text/css" media="screen" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-
+	<link rel="stylesheet" type="text/css" media="screen" href="/assets/css/prism.css">
 {% seo %}
   </head>
 
@@ -72,7 +72,9 @@
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
-
+	
+	<script src="/assets/css/prism.css" />
+	
     {% if site.google_analytics %}
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
