@@ -19,7 +19,7 @@
 
 {% seo %}
   </head>
-
+	{% assign post_url = root_url | append: page.url %}
   <body>
 
     <!-- HEADER -->
@@ -70,9 +70,23 @@
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        {% if site.github.is_project_page %}
-        <p class="copyright">{{ site.title | default: site.github.repository_name }} maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
-        {% endif %}
+		
+		<div class="share">
+			<h5>Share this article</h5>
+			<div class="share-facebook">
+				<a href="{{ 'https://www.facebook.com/sharer/sharer.php?u=' | append: post_url }}" target="_blank">
+					<img src="/assets/img/f_logo_RGB-Hex-Blue_512.png" alt="Share on Facebook" />
+				</a>
+			</div>
+			<div class="share-linkedin">
+				<a href="{{ 'https://www.linkedin.com/shareArticle?mini=true&url=' | append: post_url | append: '&title=' | page.title }}" target="_blank">
+				   <img src="/assets/img/LI-In-Bug.png" alt="Share on LinkedIn" />
+				</a>
+			</div>
+		</div>
+		<hr/>
+
+        <p class="copyright">{{ site.title }} maintained by Mike Towill @ Solores Software</p>
         
       </footer>
     </div>
