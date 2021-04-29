@@ -10,36 +10,35 @@ In a [previous post](https://solores-software.net/post/csharp-HttpClient-wrapper
  
 <pre><code class="language-csharp">
  
- 
-	// in Startup.cs
-	
-	//...
-	using Microsoft.Extensions.DependencyInjection;
-	using System.Net.Http;
+// in Startup.cs
+
+//...
+using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
 
 
-	public void ConfigureServices(IServiceCollection services)
+public void ConfigureServices(IServiceCollection services)
+{
+
+	string analyticsApiUrl = "https://my-R-analytics-api/"
+
+	services.AddHttpClient("AnalyticsAPI", client =>
 	{
-		
-		string analyticsApiUrl = "https://my-R-analytics-api/"
-
-		services.AddHttpClient("AnalyticsAPI", client =>
+		client.BaseAddress = new Uri(analyticsApiUrl);
+		client.DefaultRequestHeaders.Add("Accept", "application/json");
+	})
+	.ConfigurePrimaryHttpMessageHandler(() =>
+	{
+		return new HttpClientHandler()
 		{
-			client.BaseAddress = new Uri(analyticsApiUrl);
-			client.DefaultRequestHeaders.Add("Accept", "application/json");
-		})
-		.ConfigurePrimaryHttpMessageHandler(() =>
-		{
-			return new HttpClientHandler()
-			{
-				AllowAutoRedirect = true
-			};
-		});;
+			AllowAutoRedirect = true
+		};
+	});;
 
-		services.AddTransient<IAnalyticsHttpWrapper, AnalyticsHttpWrapper >();
-		
-		//...
-	}
+	services.AddTransient<IAnalyticsHttpWrapper, AnalyticsHttpWrapper >();
+
+	//...
+}
 </pre></code>
 
 And then a standard HTTP Request Wrapper class with one generic async GET request method might look something like this:
