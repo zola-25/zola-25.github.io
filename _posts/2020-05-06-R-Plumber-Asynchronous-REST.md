@@ -26,7 +26,7 @@ The key to allowing this pattern in R Plumber is to make use of the [future](htt
 
 Normally our R Plumber GET request endpoint for a long running analysis might look something like this:
 
-'''r
+'''R
   # plumber_synchronous.R
 
   source("./analysis.R")
@@ -49,7 +49,7 @@ Given that runAnalysis takes a long time, this stops any other requests being ha
 Instead we replace this GET request handler with a POST request handler that creates a future with the work of running the analysis.
 
 
-'''r
+'''R
   # plumber.R
   require(future)
   require(uuid)
@@ -119,7 +119,7 @@ The POST request handler gives each analysis request a unique GUID/UUID, and kee
 
 It then responds with a 202 status code, used [for indicating that request has been accepted for processing, but the processing has not been completed](https://restfulapi.net/http-status-202-accepted/), and with the location which the client can keep checking to get the status of the executing analysis.
 
-'''r
+'''R
 #' @serializer unboxedJSON
 #' @get /queuedResource/<uniqueId>/status
 function(res, uniqueId){
@@ -179,7 +179,7 @@ Because each analysis has been given a unique ID, the client can check the statu
 
 If the future is still executing, it replies back with the same 202 status, so the client knows to keep checking back. If it has completed, it moves the future off the executingFutures list and on to the completedFutures list. It then returns a 303 redirect status code, along setting the location head with the location of the completed resource. Finally, we define the endpoint where completed resources can be accessed:
 
-'''r
+'''R
 #' @serializer unboxedJSON
 #' @get /resource/<uniqueId>/result
 function(res, uniqueId){
