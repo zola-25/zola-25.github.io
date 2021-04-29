@@ -26,15 +26,16 @@ The key to allowing this pattern in R Plumber is to make use of the [future](htt
 
 Normally our R Plumber GET request endpoint for a long running analysis might look something like this:
 
+{% raw %}
 <pre><code class="language-r">
   # plumber_synchronous.R
 
   source("./analysis.R")
 
 
-  #\' Get then analysis result for the provided <analysisId>
-  #\' @serializer unboxedJSON
-  #\' @get /analysis/<analysisId>/result
+  #' Get then analysis result for the provided <analysisId>
+  #' @serializer unboxedJSON
+  #' @get /analysis/<analysisId>/result
   function(analysisId){
 
     analysisResult <- runAnalysis(analysisId)
@@ -44,10 +45,13 @@ Normally our R Plumber GET request endpoint for a long running analysis might lo
   }
 </code></pre>
 
+{% endraw %}
+
 Given that runAnalysis takes a long time, this stops any other requests being handled until it has finished.
 
 Instead we replace this GET request handler with a POST request handler that creates a future with the work of running the analysis.
 
+{% raw %}
 <pre><code class="language-r">
   # plumber.R
   require(future)
@@ -113,6 +117,8 @@ Instead we replace this GET request handler with a POST request handler that cre
                 location=queueLocation))
   }
 </code></pre>
+
+{% endraw %}
 
 The POST request handler gives each analysis request a unique GUID/UUID, and keeps track of the executing analyses by storing them in a global variable, executingFutures.
 
