@@ -4,17 +4,19 @@
 @import "{{ site.theme }}";
 
 body {
-  -moz-tab-size: 4;
-  tab-size: 4;
+    -moz-tab-size: 4;
+    tab-size: 4;
 }
 
 .inner {
-  max-width: 992px;
+    max-width: 992px;
 }
 
 
 #project_title {
-  a { color: inherit; } 
+    a {
+        color: inherit;
+    }
 }
 
 .social-links {
@@ -29,17 +31,26 @@ body {
     ul {
         padding: 0;
         list-style-type: none;
-        
+
 
         li {
             display: inline-block;
-            margin: 10px;
+            margin: 0px 10px 10px 10px;
+
         }
     }
 }
 
+.recent-posts {
+    float: right;
+
+    ul {
+        list-style-type: none;
+    }
+}
+
 .linkedin-logo {
-    max-width: 210px;
+    max-width: 240px;
     height: auto;
 }
 
@@ -69,6 +80,7 @@ body {
 
     .share-facebook {
         display: inline-block;
+
         img {
             max-width: 50px;
             height: auto;
