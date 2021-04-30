@@ -18,19 +18,25 @@ body {
 }
 
 .social-links {
-	text-align: right;
-	border-style: none;
-	border-width: 0px;
-    margin: 0px;
-    padding: 0px;
-	ul {
-		padding: 0;
-		list-style-type: none;
-		text-align: center;
-		li {
-			margin: 10px;
-		}
-	}
+
+    float: right;
+
+    img {
+        border-style: none;
+        border-width: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    ul {
+        padding: 0;
+        list-style-type: none;
+        text-align: center;
+
+        li {
+            margin: 10px;
+        }
+    }
 }
 
 .linkedin-logo {
