@@ -29,7 +29,7 @@
               <div class="header-flex-wrap">
                   <div class="header-title-flex-item">
 
-                      <h1 id="project_title"><a href="{{ root_url }}"> {{ site.title | default: site.github.repository_name }} </a></h1>
+                      <h1 id="project_title"><a href="{{ site.url }}"> {{ site.title | default: site.github.repository_name }} </a></h1>
                       <h2 id="project_tagline">{{ site.description | default: site.github.project_tagline }}</h2>
 
                       <div class="social-links">
@@ -83,12 +83,12 @@
               <div class="share">
                   <h3 class="h3-title">Share this article</h3>
                   <div class="share-facebook">
-                      <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ post.url}}" target="_blank">
+                      <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ first_post_url | post.url}}" target="_blank">
                           <img src="/assets/img/f_logo_RGB-Hex-Blue_512.png" alt="Share on Facebook" title="Share on Facebook" />
                       </a>
                   </div>
                   <div class="share-linkedin">
-                      <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ post.url}}&title={{ page.title }}" target="_blank">
+                      <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ first_post_url | post.url}}&title={{ page.title }}" target="_blank">
                           <img src="/assets/img/LI-In-Bug.png" alt="Share on LinkedIn" title="Share on LinkedIn" />
                       </a>
                   </div>
