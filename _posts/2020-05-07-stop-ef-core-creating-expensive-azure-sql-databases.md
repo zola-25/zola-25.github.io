@@ -1,6 +1,7 @@
 ---
 title: "Stop EF Core creating expensive Azure SQL Database configurations on start up"
 permalink: /post/stop-ef-core-creating-expensive-azure-sql-databases
+layout: default
 tags: ef-core azure sql git
 ---
 

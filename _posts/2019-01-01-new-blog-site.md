@@ -1,6 +1,7 @@
 ---
 title: "New Blog Site"
 permalink: /post/new-blog-site
+layout: default
 tags: blog dotnet asp.net asp.netcore dotnetcore .net
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "A template for handling Asynchronous REST Operations in R Plumber"
 permalink: /post/a-template-for-handling-asynchronous-rest-operations-in-r-plumber
+layout: default
 tags: R plumber REST asynchronous 
 ---
 

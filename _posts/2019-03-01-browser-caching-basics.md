@@ -1,6 +1,7 @@
 ---
 title: "Browser Caching Basics"
 permalink: /post/browser-caching-basics
+layout: default
 tags: browser caching cache chrome firefox edge
 ---
 

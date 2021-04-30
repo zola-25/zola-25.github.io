@@ -1,6 +1,7 @@
 ---
 title: "C# HttpClient Wrapper for Asynchronous REST resources"
 permalink: /post/csharp-HttpClient-wrapper-for-asynchronous-REST-resources
+layout: default
 tags: C# HttpClient Asynchronous REST
 ---
 
