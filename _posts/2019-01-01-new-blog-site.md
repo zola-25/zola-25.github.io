@@ -5,8 +5,6 @@ layout: default
 tags: blog dotnet asp.net asp.netcore dotnetcore .net
 ---
 
-{% assign content = post.content %}
-{% assign page = post %}
 {% include post_detail.html %}
 
 Hello! I'm Mike, a .NET-oriented developer, and this is my tech blog. I'm not usually the blogging type but as a developer you accumulate so much random knowledge that often gets lost or forgotten - it seemed like it was time to start recording some of it, so I can refer back to it, and if it helps anyone else out there even better :)

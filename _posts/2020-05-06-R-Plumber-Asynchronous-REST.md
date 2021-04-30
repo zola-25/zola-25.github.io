@@ -5,8 +5,6 @@ layout: default
 tags: R plumber REST asynchronous 
 ---
 
-{% assign content = post.content %}
-{% assign page = post %}
 {% include post_detail.html %}
 
 <div style="text-align: center">

@@ -5,8 +5,6 @@ layout: default
 tags: browser caching cache chrome firefox edge
 ---
 
-{% assign content = post.content %}
-{% assign page = post %}
 {% include post_detail.html %}
 
 Browsers cache web content to deliver previously visited pages faster.

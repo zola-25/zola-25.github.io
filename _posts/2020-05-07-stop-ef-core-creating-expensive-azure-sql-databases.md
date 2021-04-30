@@ -5,8 +5,6 @@ layout: default
 tags: ef-core azure sql git
 ---
 
-{% assign content = post.content %}
-{% assign page = post %}
 {% include post_detail.html %}
 
 If you're developing an application that uses Azure SQL Databases for development and testing, you usually just want the bare minimum configuration, the Basic or Standard options, so you don't waste cash.
