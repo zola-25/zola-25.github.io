@@ -79,17 +79,16 @@
       <!-- FOOTER  -->
       <div id="footer_wrap" class="outer">
           <footer class="inner">
-              <h2>{{ first_post_url }}</h2>
               <hr />
               <div class="share">
                   <h3 class="h3-title">Share this article</h3>
                   <div class="share-facebook">
-                      <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ first_post_url | post.url}}" target="_blank">
+                      <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ post.url}}" target="_blank">
                           <img src="/assets/img/f_logo_RGB-Hex-Blue_512.png" alt="Share on Facebook" title="Share on Facebook" />
                       </a>
                   </div>
                   <div class="share-linkedin">
-                      <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ first_post_url | post.url}}&title={{ page.title }}" target="_blank">
+                      <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ post.url}}&title={{ page.title }}" target="_blank">
                           <img src="/assets/img/LI-In-Bug.png" alt="Share on LinkedIn" title="Share on LinkedIn" />
                       </a>
                   </div>
