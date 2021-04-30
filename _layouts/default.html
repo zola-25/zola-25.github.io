@@ -30,11 +30,18 @@
           {% endif %}
 
 		<h1 id="project_title"><a href="{{ root_url }}"> {{ site.title | default: site.github.repository_name }} </a></h1>
-          	<h2 id="project_tagline">{{ site.description | default: site.github.project_tagline }}</h2>
-
-		<a href="https://stackoverflow.com/users/3910619/zola25"><img src="https://stackoverflow.com/users/flair/3910619.png?theme=clean" alt="profile for zola25 at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for zola25 at Stack Overflow, Q&amp;A for professional and enthusiast programmers" width="208" height="58"></a>
-
-		<a href="https://www.linkedin.com/in/mike-towill-b54ab21b"><img class="linkedin-logo" src="/assets/img/LI-Logo.png"></a>
+		<h2 id="project_tagline">{{ site.description | default: site.github.project_tagline }}</h2>
+		
+		<div class="social-links">
+			<ul>
+				<li>
+					<a href="https://stackoverflow.com/users/3910619/zola25"><img src="https://stackoverflow.com/users/flair/3910619.png?theme=clean" alt="profile for Mike Towill at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="Profile for Mike Towill at Stack Overflow, Q&amp;A for professional and enthusiast programmers" width="208" height="58"></a>
+				</li>
+				<li>
+					<a href="https://www.linkedin.com/in/mike-towill-b54ab21b"><img class="linkedin-logo" src="/assets/img/LI-Logo.png" alt="Mike Towill's LinkedIn profile" title="Mike Towill's LinkedIn profile"></a>
+				</li>
+			</ul>
+		</div>
 
           {% if site.show_downloads %}
             <section id="downloads">
