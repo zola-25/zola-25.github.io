@@ -5,8 +5,6 @@ layout: default
 tags: R plumber REST asynchronous 
 ---
 
-{% include post_detail.html %}
-
 <div style="text-align: center">
   <h3> Serve concurrent requests with R plumber without creating multiple instances with complex load balancing solutions </h3>
 </div>
