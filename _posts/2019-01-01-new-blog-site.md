@@ -5,6 +5,11 @@ layout: default
 tags: blog dotnet asp.net asp.netcore dotnetcore .net
 ---
 
+{% assign post = site.posts.first %}
+{% assign content = post.content %}
+{% assign page = post %}
+{% include post_detail.html %}
+
 Hello! I'm Mike, a .NET-oriented developer, and this is my tech blog. I'm not usually the blogging type but as a developer you accumulate so much random knowledge that often gets lost or forgotten - it seemed like it was time to start recording some of it, so I can refer back to it, and if it helps anyone else out there even better :)
 This is my own blog site that I made for myself in ASP.NET Core MVC and hosted on Azure. It has a few useful features, like a simple search function, and a protected Admin section where the blog site owner can create, save , edit and delete blog posts. 
 

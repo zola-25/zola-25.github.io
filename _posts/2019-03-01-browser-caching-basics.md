@@ -5,6 +5,11 @@ layout: default
 tags: browser caching cache chrome firefox edge
 ---
 
+{% assign post = site.posts.first %}
+{% assign content = post.content %}
+{% assign page = post %}
+{% include post_detail.html %}
+
 Browsers cache web content to deliver previously visited pages faster.
 
 This caching can be controlled by the web server with the HTTP header cache-control (sometimes also using the header e-tag), as explained later.
