@@ -19,8 +19,6 @@ body {
 
 .social-links {
 
-    float: right;
-
     img {
         border-style: none;
         border-width: 0px;
@@ -31,9 +29,10 @@ body {
     ul {
         padding: 0;
         list-style-type: none;
-        text-align: center;
+        
 
         li {
+            display: inline-block;
             margin: 10px;
         }
     }
