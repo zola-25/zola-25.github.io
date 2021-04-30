@@ -36,10 +36,10 @@
             <h3>Find Me</h3>
             <ul>
                 <li>
-                    <a href="https://stackoverflow.com/users/3910619/zola25"><img src="https://stackoverflow.com/users/flair/3910619.png?theme=clean" alt="profile for Mike Towill at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="Profile for Mike Towill at Stack Overflow, Q&amp;A for professional and enthusiast programmers" width="208" height="58"></a>
+                    <a href="https://stackoverflow.com/users/3910619/zola25" target="_blank"><img src="https://stackoverflow.com/users/flair/3910619.png?theme=clean" alt="profile for Mike Towill at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="Profile for Mike Towill at Stack Overflow, Q&amp;A for professional and enthusiast programmers" width="208" height="58"></a>
                 </li>
                 <li>
-                    <a href="https://www.linkedin.com/in/mike-towill-b54ab21b"><img class="linkedin-logo" src="/assets/img/LI-Logo.png" alt="Mike Towill's LinkedIn profile" title="Mike Towill's LinkedIn profile"></a>
+                    <a href="https://www.linkedin.com/in/mike-towill-b54ab21b" target="_blank"><img class="linkedin-logo" src="/assets/img/LI-Logo.png" alt="Mike Towill's LinkedIn profile" title="Mike Towill's LinkedIn profile"></a>
                 </li>
             </ul>
         </div>
@@ -80,26 +80,29 @@
 
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
-      <footer class="inner">
-		
-		<div class="share">
-			<h5>Share this article</h5>
-			<div class="share-facebook">
-				<a href="{{ 'https://www.facebook.com/sharer/sharer.php?u=' | append: post_url }}" target="_blank">
-					<img src="/assets/img/f_logo_RGB-Hex-Blue_512.png" alt="Share on Facebook" />
-				</a>
-			</div>
-			<div class="share-linkedin">
-				<a href="{{ 'https://www.linkedin.com/shareArticle?mini=true&url=' | append: post_url | append: '&title=' | page.title }}" target="_blank">
-				   <img src="/assets/img/LI-In-Bug.png" alt="Share on LinkedIn" />
-				</a>
-			</div>
-		</div>
-		<hr/>
+        <footer class="inner">
+            <hr />
+            <div class="share">
+                <h5>Share this article</h5>
+                <div class="share-facebook">
+                    <a href="{{ 'https://www.facebook.com/sharer/sharer.php?u=' | append: root_url | append: page.url }}" target="_blank">
+                        <img src="/assets/img/f_logo_RGB-Hex-Blue_512.png" alt="Share on Facebook" />
+                    </a>
+                </div>
+                <div class="share-linkedin">
+                    <a href="{{ 'https://www.linkedin.com/shareArticle?mini=true&url=' | append: root_url | append: page.url | append: '&title=' | page.title }}" target="_blank">
+                        <img src="/assets/img/LI-In-Bug.png" alt="Share on LinkedIn" />
+                    </a>
+                </div>
+            </div>
 
-        <p class="copyright">{{ site.title }} maintained by Mike Towill @ Solores Software</p>
-        
-      </footer>
+            <hr />
+
+            <div class="copyright">
+                <p>&copy; {{ 'now' | date :'%Y' }} - Solores Software</p>
+            </div>
+
+        </footer>
     </div>
 	
     {% if site.google_analytics %}
