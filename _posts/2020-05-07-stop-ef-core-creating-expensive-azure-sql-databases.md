@@ -5,7 +5,6 @@ layout: default
 tags: ef-core azure sql git
 ---
 
-{% assign post = site.posts.first %}
 {% assign content = post.content %}
 {% assign page = post %}
 {% include post_detail.html %}

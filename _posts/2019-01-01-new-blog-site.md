@@ -5,7 +5,6 @@ layout: default
 tags: blog dotnet asp.net asp.netcore dotnetcore .net
 ---
 
-{% assign post = site.posts.first %}
 {% assign content = post.content %}
 {% assign page = post %}
 {% include post_detail.html %}
