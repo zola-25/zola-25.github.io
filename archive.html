@@ -3,15 +3,16 @@ layout: default
 title: "Post Archive"
 permalink: /archive
 ---
-
-<ul class="post-list">
-    {% for post in site.posts %}
-    <li>
-        <a href="{{ post.url }}">
-            <h3>{{ post.title }}</h3>
-        </a>
-        <p class="post-date">{{ post.date | date: "%d %B %Y" }}</p>
-        <div>{{ post.content | truncatehtml | truncatewords: 60 }}</div>
-    </li>
-    {% endfor %}
-</ul>
+<div class="post-list">
+    <ul >
+        {% for post in site.posts %}
+        <li>
+            <a href="{{ post.url }}">
+                <h3>{{ post.title }}</h3>
+            </a>
+            <p class="post-date">{{ post.date | date: "%d %B %Y" }}</p>
+            <div>{{ post.content | truncatehtml | truncatewords: 60 }}</div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

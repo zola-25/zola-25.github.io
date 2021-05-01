@@ -74,15 +74,15 @@ body {
     ul {
         padding: 0;
         list-style-type: none;
-    }
-
-    li {
-        border-bottom: 1px dotted grey;
+    
+        li {
+            border-bottom: 1px dotted grey;
+        }
     }
 
     .post-date {
-        font-size: small;
         color: grey;
+        margin: 5px 0px 5px 0px;
     }
 }
 
