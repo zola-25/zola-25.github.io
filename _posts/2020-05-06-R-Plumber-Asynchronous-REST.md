@@ -21,7 +21,7 @@ However there is a little-discussed middle-of-the-road option that avoids this e
 
 This pattern is ideal for many R Plumber scenarios are often we are only using R to perform some time-consuming analysis. It also solves the problem of a fixed timeout some cloud providers enforce on HTTP request processing when using their hosting. For example, Azure App Services [will timeout requests after 4 minutes](https://stackoverflow.com/questions/32755403/increase-azure-web-app-request-timeout), with no option for the user to increase this setting, other than moving to their own VM.
 
-Implementation
+###Implementation
 
 The key to allowing this pattern in R Plumber is to make use of the [future](https://rstudio.github.io/promises/articles/futures.html) package. Briefly, the future package is like a Task in .NET, in that you can perform some action asynchronously, outside of the main executing thread, and in R this means in a separate process.
 
