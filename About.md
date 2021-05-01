@@ -23,15 +23,14 @@ With previous deep experience in
 
 He is also experienced in:
 
-* Docker 
-* YAML
-* Javascript
-* JQuery
-* CSS
+* HTML, CSS, Javascript & JQuery
 * SASS
 * Bootstrap
 * Gulp 
 * Babel
+* Docker
+* YAML
+* Azure CLI
 * .NET concurrency and multithreading 
 * Dependency injection
 * Unit testing with NUnit/XUnit 
