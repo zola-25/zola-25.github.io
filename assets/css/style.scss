@@ -89,12 +89,8 @@ body {
 .solores-header {
 }
 
-.solores-logo {
-    width: 40px;
-    height: 40px;
-    margin: auto;
-    vertical-align: sub;
-    display: inline-block;
+.clear-img-theme {
+    margin: 0;
     padding: 0;
     border: none;
     box-shadow: none;
@@ -102,6 +98,14 @@ body {
     -moz-box-shadow: none;
     -o-box-shadow: none;
     -ms-box-shadow: none;
+}
+
+.solores-logo {
+    width: 40px;
+    height: 40px;
+    margin: auto;
+    vertical-align: sub;
+    display: inline-block;
 }
 
 .select-posts {
