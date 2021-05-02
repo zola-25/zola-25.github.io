@@ -13,7 +13,7 @@ For example, when trying to find the optimal prediction model, consider the simp
 
 We are trying to find how much variance in Y is explained by each additional term n, and what the maximum number of terms should be. Transforming our fitting data x into orthogonal polynomials, using R's `poly()` function, allows the accurate estimation of each term's contribution.
 
-For more explanation, see this stack exchange answer: [Why regression with orthogonal polynomials is useful](https://stats.stackexchange.com/a/433190/223569){:target="_blank" rel="noopener"}:
+For more explanation, see this stack exchange answer: [Why regression with orthogonal polynomials is useful](https://stats.stackexchange.com/a/433190/223569):
 
 "From the orthogonal polynomial model but not the raw polynomial model, we know that most of the variance explained in the outcome is due to the linear term, with very little coming from the square term and even less from the cubic term. The raw polynomial values don't tell that story."
 
@@ -21,7 +21,7 @@ However when using linear regression as a maching learning tool, we want to make
 
 R's `poly()` transforms training data x into orthogonal polynomials, and the attributes alpha and norm2 can be used to transform the new data.
 
-This transformation is covered in R [here](https://stackoverflow.com/a/26729318/3910619){:target="_blank" rel="noopener"}. C#, given its functional additions over the years, is also a good language to perform the transform, as the transformation requires creating different functions based on the polynomial order:
+This transformation is covered in R [here](https://stackoverflow.com/a/26729318/3910619). C#, given its functional additions over the years, is also a good language to perform the transform, as the transformation requires creating different functions based on the polynomial order:
 
 If we save R's `poly()` transformation parameters into JSON:
 
