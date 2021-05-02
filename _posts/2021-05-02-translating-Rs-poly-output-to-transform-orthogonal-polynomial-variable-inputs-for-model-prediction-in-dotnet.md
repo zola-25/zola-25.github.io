@@ -37,6 +37,8 @@ write(x = orthogCoefsJson, file = outputFile, append = FALSE)
 
 ```
 
+Then in C# our orthogonal transformation functions based on the transformation in our training data would look like this:
+
 ```csharp
 
 public class PolyParameters
