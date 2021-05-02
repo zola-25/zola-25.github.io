@@ -26,6 +26,7 @@ This transformation is covered in R [here](https://stackoverflow.com/a/26729318/
 If we save R's poly() transformation parameters into JSON:
 
 '''R
+
 z <- poly(1:10, 3)
 orthogCoefs <- attributes(z)$coefs
 
@@ -126,3 +127,5 @@ public List<double> PolyTransformNewDataExample(List<double> fittedXCoeff, List<
   return newPredictions;
   
 }
+
+'''
