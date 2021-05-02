@@ -15,7 +15,7 @@ We are trying to find how much variance in Y is explained by each additional ter
 
 For more explanation, see this stack exchange answer: [Why regression with orthogonal polynomials is useful](https://stats.stackexchange.com/a/433190/223569):
 
-"From the orthogonal polynomial model but not the raw polynomial model, we know that most of the variance explained in the outcome is due to the linear term, with very little coming from the square term and even less from the cubic term. The raw polynomial values don't tell that story."
+*"From the orthogonal polynomial model but not the raw polynomial model, we know that most of the variance explained in the outcome is due to the linear term, with very little coming from the square term and even less from the cubic term. The raw polynomial values don't tell that story."*
 
 However when using linear regression as a maching learning tool, we want to make predictions on new data, and if we have a model fitted using orthogonal polynomials, we need to transform x using the same transformation that was used on the training data. We cannot use `poly()` on the new data as this will produce inconsistent results.
 
