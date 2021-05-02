@@ -8,6 +8,16 @@ body {
     tab-size: 4;
 }
 
+sub {
+    font-size: small;
+    vertical-align: sub;
+}
+
+sup {
+    font-size: small;
+    vertical-align: super;
+}
+
 .inner {
     max-width: 992px;
 }
