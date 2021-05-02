@@ -3,9 +3,9 @@ title: "About"
 permalink: /about
 ---
 
-Mike Towill is a Software Engineer and Consultant with 10 years experience across a wide variety of domains such as Catastrophe Bond Pricing, Machine Learning, Bioinformatics and Energy Management.
+Hi, I'm Mike Towill, a Software Engineer and Consultant with 10 years experience across a wide variety of domains such as Catastrophe Bond Pricing, Travel Technology, Machine Learning, Bioinformatics and Energy Management.
 
-He currently specialises in:
+I currently specialise in:
 
 * .NET and .NET Core 
 * ASP.NET Core
@@ -14,14 +14,14 @@ He currently specialises in:
 * Azure 
 * Azure DevOps
 
-With previous deep experience in 
+With previous deep experience in:
 
 * R
 * R Shiny
 * VB.NET
 * Excel VBA
 
-He is also experienced in:
+I'm also experienced in:
 
 * HTML, CSS, Javascript & JQuery
 * SASS
@@ -36,4 +36,5 @@ He is also experienced in:
 * Unit testing with NUnit/XUnit 
 * Mocking with NSubstitute
 
-Please see my [LinkedIn profile](https://www.linkedin.com/in/mike-towill-b54ab21b) for more information and to get in contact
+Please see my [LinkedIn profile](https://www.linkedin.com/in/mike-towill-b54ab21b) for more information and to get in contact :)
+
