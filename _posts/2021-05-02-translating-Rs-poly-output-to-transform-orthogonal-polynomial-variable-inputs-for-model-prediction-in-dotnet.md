@@ -9,7 +9,7 @@ When performing a linear regression in R and other stats platforms, polynomial v
 
 For example, when trying to find the optimal prediction model, consider the simplified model:  
 
-y = C + β1x + β2x2 + β3x3 + ... βnxn
+y = β<sub>0</sub> + β<sub>1</sub>x + β<sub>2</sub>x<sup>2</sup> + β<sub>3</sub>x<sup>3</sup> + ... + β<sub>n</sub>x<sup>n</sup>
 
 We are trying to find how much variance in Y is explained by each additional term n, and what the maximum number of terms should be. Transforming our fitting data x into orthogonal polynomials, using R's `poly()` function, allows the accurate estimation of each term's contribution.
 
@@ -116,7 +116,7 @@ public List<double> PolyTransformNewDataExample(List<double> fittedXCoeff, List<
   var newPredictions = new List<double>();
   foreach(var xVal in newXData) {
       
-      double x0 = orthogTransformationFunction(xVal, 0)
+      double x0 = orthogTransformationFunction(1, 0)
       double x1 = orthogTransformationFunction(xVal, 1)
       double x2 = orthogTransformationFunction(xVal, 2)
       double x3 = orthogTransformationFunction(xVal, 3)
