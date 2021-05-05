@@ -1,6 +1,7 @@
 ---
 title: "Stop EF Core creating expensive Azure SQL Database configurations on start up"
 permalink: /post/stop-ef-core-creating-expensive-azure-sql-databases
+layout: default
 tags: ef-core azure sql git
 ---
 
@@ -126,7 +127,6 @@ If you're running Git, here's a way in ASP.NET Core to automatically set your co
 The cruicial part is calling git from the command line through your application to get the git branch name, which I've copied from [this stack overflow answer](https://stackoverflow.com/questions/48421697/get-name-of-branch-into-code) that deserves more upvotes: 
 
 ```csharp
-
 using System;
 using System.Diagnostics;
 
@@ -220,7 +220,7 @@ public class ConnectionStringBuilder : IConnectionStringBuilder
 
 Then our Startup.cs file might look more like this:
 
-```csharp 
+```csharp
 public class Startup
 {
 	public Startup(IConfiguration configuration, IHostingEnvironment appEnv)

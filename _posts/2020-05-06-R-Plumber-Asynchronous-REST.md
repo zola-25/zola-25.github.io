@@ -1,11 +1,12 @@
 ---
 title: "A template for handling Asynchronous REST Operations in R Plumber"
 permalink: /post/a-template-for-handling-asynchronous-rest-operations-in-r-plumber
+layout: default
 tags: R plumber REST asynchronous 
 ---
 
 <div style="text-align: center">
-  <h3> Serve concurrent requests with R plumber without creating multiple instances with complex load balancing solutions <h3>
+  <h3> Serve concurrent requests with R plumber without creating multiple instances with complex load balancing solutions </h3>
 </div>
 
 ### The single-threading Problem
@@ -20,105 +21,105 @@ However there is a little-discussed middle-of-the-road option that avoids this e
 
 This pattern is ideal for many R Plumber scenarios are often we are only using R to perform some time-consuming analysis. It also solves the problem of a fixed timeout some cloud providers enforce on HTTP request processing when using their hosting. For example, Azure App Services [will timeout requests after 4 minutes](https://stackoverflow.com/questions/32755403/increase-azure-web-app-request-timeout), with no option for the user to increase this setting, other than moving to their own VM.
 
-Implementation
+###Implementation
 
 The key to allowing this pattern in R Plumber is to make use of the [future](https://rstudio.github.io/promises/articles/futures.html) package. Briefly, the future package is like a Task in .NET, in that you can perform some action asynchronously, outside of the main executing thread, and in R this means in a separate process.
 
 Normally our R Plumber GET request endpoint for a long running analysis might look something like this:
 
-'''R
-# plumber_synchronous.R
+```R
+  # plumber_synchronous.R
 
-source("./analysis.R")
+  source("./analysis.R")
 
 
-#' Get then analysis result for the provided <analysisId>
-#' @serializer unboxedJSON
-#' @get /analysis/<analysisId>/result
-function(analysisId){
-  
-  analysisResult <- runAnalysis(analysisId)
-            
-  return(analysisResult)
-  
-}
-'''
+  #' Get then analysis result for the provided <analysisId>
+  #' @serializer unboxedJSON
+  #' @get /analysis/<analysisId>/result
+  function(analysisId){
+
+    analysisResult <- runAnalysis(analysisId)
+
+    return(analysisResult)
+
+  }
+```
 
 Given that runAnalysis takes a long time, this stops any other requests being handled until it has finished.
 
 Instead we replace this GET request handler with a POST request handler that creates a future with the work of running the analysis.
 
-'''R
-# plumber.R
-require(future)
-require(uuid)
+```R
+  # plumber.R
+  require(future)
+  require(uuid)
 
-plan(multiprocess)
-
-
-defaultPackages <- c("plyr",
-                       "dplyr",
-                       "dbplyr",
-                       "reshape2",
-                       "neuralnet",
-                       ...whatever you need)
-                       
-defaultGlobals <- c("workingDir")
-                        
-workingDir <- getwd()
-
-executingFutures <- list()
-completedFutures <- list()
+  plan(multiprocess)
 
 
-#' Being an asynchronous analysis for the provided <analysisId>
-#' @serializer unboxedJSON
-#' @post /analysis/<analysisId>/run
-function(res, analysisId){
-  
-  analysisId <- as.integer(analysisId)
-  
-  uniqueId <- UUIDgenerate()
-  
-  f <- future(
-    {
-        setwd(workingDir)
-        source("./analysis.R")
-      
-        analysisResult <- runAnalysis(analysisId) # Run anything you like as long as it is in a package or sourced
-            
-        return(list(
-                completedLocation=paste0("/resource/", uniqueId, "/result"),
-                result=analysisResult))
-    }, 
-    globals=c(defaultGlobals,
-              "analysisId",
-              "uniqueId"), 
-    packages=c(defaultPackages)
-  )
-  
-  
-  executingFutures[[as.character(uniqueId)]] <<- f
-  
-  return(resourceAcceptedResponse(res, uniqueId))
-  
-}
+  defaultPackages <- c("plyr",
+                         "dplyr",
+                         "dbplyr",
+                         "reshape2",
+                         "neuralnet",
+                         ...whatever you need)
 
-resourceAcceptedResponse <- function(res, uniqueId) {
-  
-  queueLocation <- paste0("/queuedResource/", uniqueId, "/status")
-  res$status <- 202
-  res$setHeader("location", queueLocation)
-  return(list(message=paste0("This resource is being created. Keep checking back at GET ", queueLocation, ", when completed you will be redirected to the completed resource"),
-              location=queueLocation))
-}
-'''
+  defaultGlobals <- c("workingDir")
+
+  workingDir <- getwd()
+
+  executingFutures <- list()
+  completedFutures <- list()
+
+
+  #' Being an asynchronous analysis for the provided <analysisId>
+  #' @serializer unboxedJSON
+  #' @post /analysis/<analysisId>/run
+  function(res, analysisId){
+
+    analysisId <- as.integer(analysisId)
+
+    uniqueId <- UUIDgenerate()
+
+    f <- future(
+      {
+          setwd(workingDir)
+          source("./analysis.R")
+
+          analysisResult <- runAnalysis(analysisId) # Run anything you like as long as it is in a package or sourced
+
+          return(list(
+                  completedLocation=paste0("/resource/", uniqueId, "/result"),
+                  result=analysisResult))
+      }, 
+      globals=c(defaultGlobals,
+                "analysisId",
+                "uniqueId"), 
+      packages=c(defaultPackages)
+    )
+
+
+    executingFutures[[as.character(uniqueId)]] <<- f
+
+    return(resourceAcceptedResponse(res, uniqueId))
+
+  }
+
+  resourceAcceptedResponse <- function(res, uniqueId) {
+
+    queueLocation <- paste0("/queuedResource/", uniqueId, "/status")
+    res$status <- 202
+    res$setHeader("location", queueLocation)
+    return(list(message=paste0("This resource is being created. Keep checking back at GET ", queueLocation, ", when completed you will be redirected to the completed resource"),
+                location=queueLocation))
+  }
+```
 
 The POST request handler gives each analysis request a unique GUID/UUID, and keeps track of the executing analyses by storing them in a global variable, executingFutures.
 
 It then responds with a 202 status code, used [for indicating that request has been accepted for processing, but the processing has not been completed](https://restfulapi.net/http-status-202-accepted/), and with the location which the client can keep checking to get the status of the executing analysis.
 
-'''R
+```R
 #' @serializer unboxedJSON
 #' @get /queuedResource/<uniqueId>/status
 function(res, uniqueId){
@@ -172,12 +173,13 @@ resourceNotFoundResponse <- function(res, uniqueId) {
   return(list(message=paste0("Resource with ID ", uniqueId, " not found. Cache may have expired, please try recreating the resource.")
     ))
 }
-'''
+```
 
 Because each analysis has been given a unique ID, the client can check the status of it by calling GET /queuedResource/{uniqueId}/status.
 
 If the future is still executing, it replies back with the same 202 status, so the client knows to keep checking back. If it has completed, it moves the future off the executingFutures list and on to the completedFutures list. It then returns a 303 redirect status code, along setting the location head with the location of the completed resource. Finally, we define the endpoint where completed resources can be accessed:
 
+```R
 #' @serializer unboxedJSON
 #' @get /resource/<uniqueId>/result
 function(res, uniqueId){
@@ -196,7 +198,7 @@ function(res, uniqueId){
   
   return (value(f)$result)
 }
-'''
+```
 
 And that’s it, an Asynchronous REST API with R Plumber. Note that I said this API serves concurrent requests - this isn’t strictly true, as the R Plumber request handling is still single threaded and can only serve one request at a time. But because each request returns very quickly as it only has to either start the future, return the future status or return the future results, the blocking time is much shorter compared to running the analysis synchronously.
 

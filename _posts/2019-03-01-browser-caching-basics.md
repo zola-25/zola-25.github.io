@@ -1,3 +1,10 @@
+---
+title: "Browser Caching Basics"
+permalink: /post/browser-caching-basics
+layout: default
+tags: browser caching cache chrome firefox edge
+---
+
 Browsers cache web content to deliver previously visited pages faster.
 
 This caching can be controlled by the web server with the HTTP header cache-control (sometimes also using the header e-tag), as explained later.
@@ -8,20 +15,22 @@ If even the last-modified-header is not set, the resource may or may not be cach
 
 You can verify this with a simple action method in any ASP.NET Core site. Set the method to return some content and add a HTML link tag to the resource:
 
-'''
+```csharp
 [Route("cacheTest.css")]
 public IActionResult CacheTest()
 {
     Response.ContentType = "text/css";
     return Content("Some content");
 }
+```
 
-<link rel="stylesheet" href="~/cacheTest.css" />
-'''
+```xhtml
+&lt;link rel="stylesheet" href="~/cacheTest.css" /&gt;
+```
 
 Open the page in chrome while viewing the Network developer tab, making sure Disable Cache is unticked. Reload the page or click on another page within your site and you can see the regular static files are loaded from the cache, but our cacheTest.css is not:
 
-![Chrome Network Tab](/img/posts/browser-caching-basics/chrome_network_tab.png)
+![Chrome Network Tab](/assets/img/chrome_network.png)
 
 
 This is because ASP.NET automatically adds a last-modified-by header for normal static files in the wwwroot folder, but not for files created dynamically with the Content() method.
@@ -32,7 +41,7 @@ The standard way the server controlling how the browser caches a resource is wit
 
 A server can tell the browser to cache a resource and use it for a certain period of a time, by returning a response with cache-control max-age set:
 
-![Cache Control Max Age Header](/img/posts/browser-caching-basics/cache-control-max-age-header.png)
+![Cache Control Max Age Header](/assets/img/chrome_cache_control_header.png)
 
 max-age is a value in seconds that the resource may be cached for. If a new request is made for the same resource within the max-age, the browser will use the cached resource.
 
