@@ -1,6 +1,6 @@
 ---
-title: "A SignalR automatically updating loading bar in 10 minutes"
-permalink: /post/signalR-loading-bar-with-cancellation-button-in-10-minutes
+title: "An ASP.NET Core loading bar with cancellation button using SignalR in 10 minutes"
+permalink: /post/An-ASPNET-Core-loading-bar-with-cancellation-button-using-SignalR-in-10-minutes
 layout: default
 tags: SignalR SignalRCore loading-bar .net .netcore dotnetcorer asp.netcore bootstrap
 ---
