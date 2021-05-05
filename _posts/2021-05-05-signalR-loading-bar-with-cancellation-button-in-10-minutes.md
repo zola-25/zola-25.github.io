@@ -2,13 +2,12 @@
 title: "An ASP.NET Core loading bar with cancellation button using SignalR in 10 minutes"
 permalink: /post/An-ASPNET-Core-loading-bar-with-cancellation-button-using-SignalR-in-10-minutes
 layout: default
-tags: SignalR SignalRCore loading-bar .net .netcore dotnetcorer asp.netcore bootstrap
+tags: SignalR loading-bar .net .netcore dotnetcore asp.netcore bootstrap
 ---
 
 The aim here is to demonstrate the simplest way to use SignalR (Core version) in ASP.NET Core to create a loading bar that will automatically update itself whenever we push through SignalR the latest progress amount of a long running task to it.
 
-I won't go into details of every function and class necessary here, it's just an example using only ASP.NET, SignalR
-
+I won't go into details of every function and class necessary here, it's just an example using only ASP.NET Core, JQuery, Bootstrap and SignalR.
 
 ![SignalR Loading Bar Demo](\assets\img\posts\signalR-loading-bar-in-10-minutes)
 
