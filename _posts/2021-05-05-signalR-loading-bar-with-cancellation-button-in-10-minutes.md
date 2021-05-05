@@ -5,13 +5,13 @@ layout: default
 tags: SignalR loading-bar .net .netcore dotnetcore asp.netcore bootstrap
 ---
 
-The aim here is to demonstrate the simplest way to use SignalR (Core version) in ASP.NET Core to create a loading bar that will automatically update itself whenever we push through SignalR the latest progress amount of a long running task to it.
+The aim here is to demonstrate the simplest way to use SignalR (ASP.NET Core version) in ASP.NET Core to create a loading bar that will automatically update itself whenever we push through SignalR the latest progress amount of a long running task to it.
 
 I won't go into details of every function and class necessary here, it's just an example using only ASP.NET Core, JQuery, Bootstrap and SignalR.
 
 ![SignalR Loading Bar Demo](/assets/img/posts/signalR-loading-bar-in-10-minutes/signalR-loading-bar-in-10-minutes.png)
 
-Starting from the default VS 2019 MVC template, add a new folder in the Web Project called SignalR.
+Starting from the default VS 2019 MVC template, add a new folder in a Web Project called SignalR.
 
 Then add a class deriving from the SignalR Hub class that's used to push and receive communications from the client:
 
@@ -28,7 +28,7 @@ namespace SignalRDemo.SignalR
 
 
 ```
-Secondly, in the same folder, add a factory class that creates a [Progress<double>](https://docs.microsoft.com/en-us/dotnet/api/system.progress-1?view=net-5.0) (returned as an IProgress<double>) that defines the action to be done when you want to send an update to your progress bar.
+Secondly, in the same folder, add a factory class that creates a [Progress<double>](https://docs.microsoft.com/en-us/dotnet/api/system.progress-1?view=net-5.0) (referenced as an IProgress<double>) that defines the action to be done when you want to update the progress of your task, which in our case is to send an update to the progress bar.
 
 With the LoadingBarHub we created above, it would look like this:
 
@@ -117,7 +117,7 @@ public async Task<IActionResult> Load(LoadViewModel loadViewModel, CancellationT
 
 ```
 
-In our /Views/Home/Index.cshtml, we define a few form controls, and a [bootstrap progress bar](https://getbootstrap.com/docs/4.0/components/progress/), that will demo the real time updates from calling the `Load(LoadViewModel loadViewModel, CancellationToken cancellationToken)` action method.
+In our /Views/Home/Index.cshtml, we define a few form controls, and a [bootstrap progress bar](https://getbootstrap.com/docs/4.0/components/progress/), that will demo the real time updates by pressing a button that makes an ajax call to the `Load(LoadViewModel loadViewModel, CancellationToken cancellationToken)` action method.
 
 ```cshtml
 
@@ -156,7 +156,7 @@ In our /Views/Home/Index.cshtml, we define a few form controls, and a [bootstrap
 
 ```
 
-Then in our javascript file site.js, we define two [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE) encapsulations, one specific to our loading bar home page with its form controls (`loadingBar`), the other a resusable IIFE that can be shared across your site whenever you need a loading bar - `loadingWithProgressAndAbort` (albeit needing a few tweaks, perhaps passing in different div ids for your loading bar and cancel button, if they change across pages):
+Then in our javascript file site.js, we define two [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE) encapsulations, one specific to our loading bar home page with its form controls (`loadingBar`), the other a resusable IIFE that can be shared across your site whenever you need a loading bar - `loadingWithProgressAndAbort.withSignalR(ajaxOptions)` (albeit needing a few tweaks, perhaps additionally passing in different div ids for your loading bar and cancel button, if they change across pages):
 
 ```js
 
@@ -345,7 +345,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 }
 ```
 
-And that's it. Our loading bar will take as long to crawl across the screen as the number of seconds we give it. If we click the cancel button, it will notify the `CancellationToken` we passed to our action method that our long running process is cancelled and to exit early from the action method. 
+And that's it. Our loading bar will take as long to crawl across the screen as the number of seconds we specify. If we click the cancel button, it will notify the `CancellationToken` we passed to our action method that our long running process is cancelled and to exit early from the action method. 
 
 The CancellationToken can be passed down into other class methods and View Components, so the user always has the ability to cancel a long running process. Also, if they navigate away from the site page while the long process is still executing, the `CancellationToken` will be activated and the action method exited, freeing up computational or thread resources.
 
