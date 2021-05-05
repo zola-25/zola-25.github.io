@@ -9,7 +9,7 @@ The aim here is to demonstrate the simplest way to use SignalR (Core version) in
 
 I won't go into details of every function and class necessary here, it's just an example using only ASP.NET Core, JQuery, Bootstrap and SignalR.
 
-![SignalR Loading Bar Demo](\assets\img\posts\signalR-loading-bar-in-10-minutes)
+![SignalR Loading Bar Demo](/assets/img/posts/signalR-loading-bar-in-10-minutes/signalR-loading-bar-in-10-minutes.png)
 
 Starting from the default VS 2019 MVC template, add a new folder in the Web Project called SignalR.
 
