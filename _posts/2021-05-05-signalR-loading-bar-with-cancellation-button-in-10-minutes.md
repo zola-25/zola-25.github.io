@@ -349,3 +349,5 @@ And that's it. Our loading bar will take as long to crawl across the screen as t
 
 The CancellationToken can be passed down into other class methods and View Components, so the user always has the ability to cancel a long running process. Also, if they navigate away from the site page while the long process is still executing, the `CancellationToken` will be activated and the action method exited, freeing up computational or thread resources.
 
+[Full example project here](https://github.com/zola-25/SignalR-LoadingBar-Demo)
+
