@@ -156,7 +156,7 @@ In our /Views/Home/Index.cshtml, we define a few form controls, and a [bootstrap
 
 ```
 
-Then in our javascript file site.js, we define two [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE) encapsulations, one specific to our loading bar home page with its form controls (`loadingBar`), the other a resusable iife that can be shared across your site whenever you need a loading bar, `loadingWithProgressAndAbort`, (albeit needing a few tweaks, perhaps passing in different div ids for your loading bar and cancel button, if they change across pages)
+Then in our javascript file site.js, we define two [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE) encapsulations, one specific to our loading bar home page with its form controls (`loadingBar`), the other a resusable IIFE that can be shared across your site whenever you need a loading bar - `loadingWithProgressAndAbort` (albeit needing a few tweaks, perhaps passing in different div ids for your loading bar and cancel button, if they change across pages):
 
 ```js
 
