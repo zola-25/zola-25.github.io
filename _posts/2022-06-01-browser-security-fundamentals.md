@@ -5,9 +5,8 @@ layout: default
 tags: Browser Web HTTP HTML CORS CSRF SOP XSS
 ---
 
-<div style="text-align: center">
-  <h3> A explanation of the common web security concepts along with their acronyms </h3>
-</div>
+
+## A explanation of the common web security concepts along with their acronyms
 
 ### Same Origin Policy (SOP)
 
