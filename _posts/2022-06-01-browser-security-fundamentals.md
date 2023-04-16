@@ -1,8 +1,8 @@
 ---
-title: "A template for handling Asynchronous REST Operations in R Plumber"
-permalink: /post/a-template-for-handling-asynchronous-rest-operations-in-r-plumber
+title: "Browser Security Fundamentals"
+permalink: /post/browser-security-fundamentals
 layout: default
-tags: R plumber REST asynchronous 
+tags: Browser Web HTTP HTML CORS CSRF SOP XSS
 ---
 
 <div style="text-align: center">
