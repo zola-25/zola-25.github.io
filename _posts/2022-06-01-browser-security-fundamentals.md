@@ -25,7 +25,7 @@ SOP only retricts malicious sites reading data from a sensitive site. It does no
 For example, a malicious site could display an image tag such as
 
 ```HTML
-  <img src="https://bankingsite.com/transfer?amount=1000&destination=12345678"/>`
+  <img src="https://bankingsite.com/transfer?amount=1000&destination=12345678"/>
 ```
 
 If the user already has a active session cookie with bankingsite.com, and bankingsite.com processes the GET requests like this as a write request, then the malicious action will occur. The malicious site can't read any data returned by this request, because of the SOP of the browser, but it doesn't stop the write action from occurring.
