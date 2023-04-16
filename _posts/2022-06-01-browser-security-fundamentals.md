@@ -24,7 +24,7 @@ SOP only retricts malicious sites reading data from a sensitive site. It does no
 
 For example, a malicious site could display an image tag such as
 
-```HTML
+``` html
   <img src="https://bankingsite.com/transfer?amount=1000&destination=12345678"/>
 ```
 
@@ -36,7 +36,7 @@ However, CSRF attacks can still mutate data using form POST requests that execut
 
 For example, if a malicious site loads with the following form:
 
-```HTML
+``` html
   <form id="transfer" method="POST" action="https://bankingsite.com/transfer">
       <input type="number" name="amount" value="1000">
       <input type="text" name="destination" value="12345678">
@@ -52,7 +52,7 @@ To prevent these kind of malicious CSRF POST requests, target servers can be set
 
 For example, a genuine form on the legitimate bankingsite.com would be generated like:
 
-```HTML
+``` html
   <form id="transfer" method="POST" action="https://bankingsite.com/transfer">
       <input type="hidden" name="csrfToken" value="50F38290ksegat3khku3a98235">
       <input type="number" name="amount" value="1000">
@@ -74,19 +74,19 @@ By default the SOP restricts sites making Ajax requests to other domains. The re
 
 CORS-compliant browsers will make a request to the external domain with an Origin HTTP header set to the requesting site:
 
-```
+``` http
   Origin: https://origin-site.com
 ```
 
 If CORS is permitted for origin-site.com, the external domain server will respond with the Access-Control-Allow-Origin header in its response:
 
-```
+``` http
   Access-Control-Allow-Origin: https://origin-site.com
 ```
 
 Or, if requests from all domains are allowed, it will respond with:
 
-```
+``` http
   Access-Control-Allow-Origin: *
 ```
 
@@ -98,7 +98,7 @@ Since some servers were developed before the CORS protocol became widely adopted
 
 Pre-flight requests are made by the browser to check the external domain server understands the CORS protocol and the requested method is permitted:
 
-```
+``` http
   OPTIONS /
   Host: external-site.com
   Origin: https://origin-site.com
