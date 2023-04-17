@@ -1,12 +1,9 @@
 ---
-title: "Browser Security Fundamentals"
+title: "Common Browser Security Concepts"
 permalink: /post/browser-security-fundamentals
 layout: default
 tags: Browser Web HTTP HTML CORS CSRF SOP XSS
 ---
-
-
-### A explanation of the common web security concepts along with their acronyms
 
 #### Same Origin Policy (SOP)
 
