@@ -6,9 +6,9 @@ tags: Browser Web HTTP HTML CORS CSRF SOP XSS
 ---
 
 
-## A explanation of the common web security concepts along with their acronyms
+### A explanation of the common web security concepts along with their acronyms
 
-### Same Origin Policy (SOP)
+#### Same Origin Policy (SOP)
 
 The Same Origin Policy is a browser security feature that prevents scripts running in one window accessing the data from another window (whether tabs, windows or iFrames), unless both windows have the same origin - being the the URL scheme, host and port.
 
@@ -17,7 +17,7 @@ The SOP retricts malicious sites reading sensitive information displayed by a ta
 Restrictions on legitimate cross-origin Ajax requests can be aleviated with by the target site implementing Cross-origin resource sharing (CORS), described later.
 
 
-### Cross-site request forgery (CSRF)
+#### Cross-site request forgery (CSRF)
 
 SOP only retricts malicious sites reading data from a sensitive site. It does not prevent a malicious site embedding a request to a target site into an element within its display, and tricking the user into making that request. 
 
@@ -65,7 +65,7 @@ In ASP.NET Core, antiforgery middleware is usually added by default with hidden 
 
 https://learn.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-7.0#antiforgery-in-aspnet-core
 
-### Cross-origin resource sharing (CORS)
+#### Cross-origin resource sharing (CORS)
 
 CORS is a mechanism to allow sites to make Ajax requests and read responses that are sent to a different domain from the host page.
 
@@ -91,7 +91,7 @@ Or, if requests from all domains are allowed, it will respond with:
 
 Or an error will be returned if the site does not allow CORS for origin-site.com.
 
-#### Pre-flight requests
+##### Pre-flight requests
 
 Since some servers were developed before the CORS protocol became widely adopted, they are configured to believe that any request made to them is legitimate, due to the SOP which prevents all cross-origin data requests.
 
@@ -114,7 +114,7 @@ If the external site does not undersand the CORS protocol, it will return an err
 
 This prevents malicious sites taking advantage of the CORS protocol to make requests to sites that assume, due to the SOP, that all requests made are valid.
 
-### Cross-site scripting (XSS)
+#### Cross-site scripting (XSS)
 
 XSS is the injection of malicious scripts into a genuine web page, that can be executed in every browser that views that page. 
 
