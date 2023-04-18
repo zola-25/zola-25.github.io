@@ -15,11 +15,15 @@ The realm here is required and serves as an identifier for the part of the site 
 
 This triggers a browser popup (similar to a popup produced by the alert() javascript function), allowing them to submit a username and password:
 
-
+<img width="457" alt="image" src="https://user-images.githubusercontent.com/29863888/232664769-3208f8ba-fc09-457e-9c4e-dd871b846edf.png">
 
 The browser then combines these into a single string with a colon separator, e.g. user1:pAssWord123, encodes to Base64, and prepends "Basic ". This is then set as the Authorization request header value and sent to the server.
 
-The server then decodes the Base64 credentials, and validates that they match the user credentials stored on the server. If so, the user is permitted access and the restricted content is returned, otherwise a 401 or similar access denied response is returned.
+The server then decodes the Base64 credentials, and validates that they match the user credentials stored on the server. If so, the user is permitted access and the restricted content is returned:
+
+<img width="273" alt="image" src="https://user-images.githubusercontent.com/29863888/232664967-79e3c8a7-936a-4e3b-b08f-92835b127cc3.png">
+
+Otherwise a 401 or similar access denied response can be returned by the server.
 
 Given that the user's credentials are transmitted unencrypted to the server, at a minimum they should be transmitted through HTTPS instead of HTTP.
 
