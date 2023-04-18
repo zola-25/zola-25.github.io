@@ -227,18 +227,65 @@ Additionally, sites should provide authenticated users with a logout mechanism t
 
 ## JWT-based authentication
 
+JWT tokens are a method for communicating information between different applications and services that can be verified as authentic and untampered.
 
+JWT tokens themselves are simple to construct, consisting of three parts:
 
+1) The header, a JSON object specifying the type of token and the algorithm used to sign the token to prove its authenticity:
 
+```json
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+```
 
+2) The payload, a JSON object containing the relevant information being transfered. 
 
+The JSON fields specified can contain standardized fields such as sub, which usually means an identifier corresponding to the principal subject of the token, such as a user ID, and exp, which means the date and time after which the JWT is no longer valid. 
 
+Custom, 'private' fields with data only relevant to the ecosystem the JWT was created for can also be included.
 
+```json
+{
+  "sub": "1234567890",
+  "username": "John Doe",
+  "exp": 1713394800
+}
+```
 
+3) The signature, a unique ID created using the specified algorithm, a secret key and a string created from base64Url encoding the header and payload and concatenating them with a dot (.). For our example, and using the secret key 'secret', this looks like this:
 
+Header in base64Url -> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
 
+Payload in base64Url -> eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJKb2huIERvZSIsImV4cCI6MTcxMzM5NDgwMH0
 
+Signature -> HMACSHA256(
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJKb2huIERvZSIsImV4cCI6MTcxMzM5NDgwMH0,
+secret
+) = kl594WAxLmLh6vff2ytJ5hxjLBe4nmyt533MB2yOSsc
 
+Our signed JWT is then 
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJKb2huIERvZSIsImV4cCI6MTcxMzM5NDgwMH0.kl594WAxLmLh6vff2ytJ5hxjLBe4nmyt533MB2yOSsc
+
+i.e. [Header in base64Url].[Payload in base64Url].[Signature]
+
+By including the signature, any party with the secret that receives the JWT can recreate the signature and compare it to the JWT's signature - if they match, the party can be confident the Header and Payload information is authentic and has not been tampered with.
+
+JWTs can also use asymmetric signing algorithms that utilize a public/private key pair. The private key is still used to create the signature and kept secret by the server, but the public key can be published openly and used by any party to verify the authenticity of the JWT claims.
+
+JWTs can be used for authentication and authorization in web applications in a similar manner to session tokens - after a user sends valid credentials to the server, the server creates and signs the JWT with any appropriate user identification and claims in the payload, and sends it back to the client. Subsequent client requests to the server include the JWT and the server identifies and verifies the user information in the payload and grants access.
+
+One advantage of this flow is that the server does not have to maintain a list of session IDs active for each user - the only thing the server maintains is the secret used for verifying the JWT claims. 
+
+The server can also include in the JWT information relevant to the user, rather than store all user details server side.
+
+Despite these advantages, the use of JWT tokens for authorization still has some drawbacks when compared to session ID tokens: 
+
+1) Since the payload information can be easily decoded, and is stored in the browser, sensitive information is vulnerable to being exposed even if the information cannot be tampered with without invalidating the JWT signature.
+
+2) Like session tokens, JWTs still need to be sent with every request
 
 
 
