@@ -1,3 +1,5 @@
 theme: jekyll-theme-slate
 title: Solores Software
 description: A software and data engineering blog
+
+markdown: kramdown
