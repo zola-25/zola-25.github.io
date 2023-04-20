@@ -288,7 +288,7 @@ Despite these advantages, the use of JWT tokens for authorization still has some
 
 Since the payload information can be easily decoded, and is stored in the browser, sensitive information is vulnerable to being exposed even if the information cannot be tampered with without invalidating the JWT signature.
 
-Instead of using JWTs to hold sensitive information, [JWE tokens](https://datatracker.ietf.org/doc/html/rfc7516){:target="_blank"} can be used to secure payload data. However they have a more complex implementation than JWTs, requiring more resources to generate and verify, and are much larger than standard JWTs.
+Instead of using JWTs to hold sensitive information, [JWE tokens](https://datatracker.ietf.org/doc/html/rfc7516) can be used to secure payload data. However they have a more complex implementation than JWTs, requiring more resources to generate and verify, and are much larger than standard JWTs.
 
 #### JWTs need to be secured both in transit and at rest
 
