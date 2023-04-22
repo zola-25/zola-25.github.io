@@ -352,13 +352,59 @@ Find OAuth 1.0 confusing? Me too. Even in this outline of the OAuth 1.0 flow, I 
 3) Scalability adjustments - Details such as a user's assigned Access Token need to be stored at both the service provider's server and the app client's server - if either of these need to be scaled horizontally, typical accommodations need to be made to ensure all server nodes access consistent data.
 
 
-### OAuth 2.0
+## OAuth 2.0
 
-OAuth 2.0 both improves and expands upon OAuth 1.0, with a simpler, more transparent authentication mechanism, and a modular approach that has applications besides the authorization of server-based third-party apps in OAuth 1.0.
+OAuth 2.0 both improves and expands upon OAuth 1.0, with simpler authentication processes, and a modular approach that allows for additional use-cases besides  server-based client app authorization.
 
 In fact, OAuth 2.0 offers several 'flows' that are appropriate for different scenarios:
 
-#### Authorization code flow
+1) Authorization Code Flow
+
+Most similar to the OAuth 1.0 flow, used for server-based client applications, but easier to implement than OAuth 1.0.
+
+2) Implict Flow (also called Implict Grant Flow)
+
+Designed for applications that cannot fully secure the application-specific secret required for authorization (aka the 'client secret').
+
+This includes Single Page Applications with zero server-side functionality, and native applications including mobile and desktop applications operating without a secure server backend.
+
+Implict Flow issues Access Tokens directly after user authorization. Has significant security vulnerabilities and its use is [no longer recommended](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-16#name-implicit-grant) by the IETF.
+
+3) Authorization Code Flow with PKCE (Proof Key for Code Exchange)
+
+The recommended alternative to Implicit Flow for applications unable to secure a client secret.
+
+The flow is similar to the standard OAuth 2.0 Authorization Code Flow, *** link ***. It has many security benefits compared to Implicit Flow, such as limiting an Access Token's visibility and risk of interception; and ensuring an Access Token can only be received by the client app instance of the authenticated user.
+
+
+4) Resource Owner Password Credentials (ROPC)
+
+With ROPC, a user enters their credentials directly into the client app, which then forwards them in an API request to the authorization server for authentication. The authorization server then returns an Access Token for the requested resource.
+
+It is generally not recommended for applications operating on the open internet, and goes against the main rationale of OAuth which is to enable authorization of third-party applications so they can access secured resources, without sharing credentials with them.
+
+However an example use case for ROPC could be when a client application is highly trusted, and interacts with the authorization server within a closed network, such as a secure company intranet. 
+
+4) Client Credentials Flow
+
+This is generally used for server-to-server communication with no user requirement. 
+
+A client application authenticates itself with the authorization server, and is sent an access token used to access the resources of another server. 
+
+The client application should be server-based to store their credentials securely.
+
+5) Device Authorization Flow
+
+You have used this flow if you've ever logged in to a streaming service on a smart TV by scanning a QR code with your mobile. The QR code opens the service website with a preset code, and after you authenticate, the client app (being the streaming app on the smart TV) receives an access token.
+
+6) Refresh Token Flow
+
+This flow is used to improve user experience in other flows. When a client app receives an access token, they may also receive a refresh token. The refresh token allows the client app the receive new access tokens without needing to reauthenticate. 
+
+
+
+
+### Authorization Code Flow
 
 This is most similar to the OAuth 1.0 flow. It is appropriate for server-based client apps, that can securely store secrets received from an authentication provider.
 
@@ -440,7 +486,7 @@ To avoid requiring the user re-authorize when their Access Token expires, a clie
 
 2) Have very-long lifetime Access Tokens - but these are at a greater risk of being exposed since they are sent with every request. Also not all OAuth 2.0 implementations support Access Token revokation.
 
-Obtaining fresh Access Tokens with a Refresh Token
+#### Obtaining fresh Access Tokens with a Refresh Token
 
 Access Tokens expire when the 'expires_in' time, set in the JSON sent from the token exchange endpoint, is reached. It is often prudent to gain a fresh Access Token at a set time before this expiry is reached, to maintain app continuity for the user.
 
@@ -488,7 +534,7 @@ OAuth 2.0 has two flows designed specifically for client-side applications, Impl
 
 However let's briefly examine Implicit Flow and it's vulnerabilities, and show how Authorization Code Flow with PKCE improves on it.
 
-Implicit Flow
+### Implicit Flow process
 
 1) As with standard Authorization Code Flow, we register our app's details with a service provider, including a unique client_id and a redirect_uri that the authorization server will direct the user after authorization.
 
@@ -502,7 +548,7 @@ To authorize the client app, the app constructs a URL pointing to the authorizat
 
 'redirect_uri' - the uri of the client app that must match the one registered with the service provider.
 
-'state' - a randomly value generated by the client server specifically for the authorization request and saved to the user's session. The state value is used to protect against CSRF attacks, explained in detail ******here******
+'state' - a randomly value generated by the client specifically for the authorization request and saved to the user's session. The state value is used to protect against CSRF attacks, explained in detail ******here******
 
 'response_type' - token (indicating the client app wants to receive the Access Token directly)
 
@@ -516,54 +562,158 @@ The Access Token, along with the standard OAuth token parameters such as expiry 
 
 https://my-spa.com/callback#access_token=akb982234huiwa&token_type=bearer&expires_in=3600&state=32fasq3q3qr
 
-The Access Token and other parameters are sent as a URL fragment (everything after the #) because URL fragments aren't sent to the server. Even if our server does nothing except return the SPA content, it still may log or monitor requests, and this prevents the sensitive data being recorded in these logs. Browser caches may also store URLs with query parameters, and when browsers navigate to different pages, they often send the originating URL in a Referer header, exposing the access token to another site.
-
+The Access Token and other parameters are sent as a URL fragment (everything after the #) because URL fragments aren't sent to the server. Even if our server does nothing except return the SPA content, it still may log or monitor requests, and this prevents the sensitive data being recorded in these logs. Browser caches also store URLs with query parameters. 
 5) The SPA extracts the Access Token and other relevant parameters from the URL and stores them in the browser, whether in memory, sessionStorage or localStorage.
 
 The SPA can now access or action protected resources from the service provider by including the header Authorization: Bearer <Access Token> in subsequent requests.
 
-Implicit Flow vulnerabilities
+#### Specific Implicit Flow vulnerabilities
 
 1) URL exposure
 
-HTTPS provides no encryption of URLs, so they can be monitored across the web. They are also stored in browser logs, which could be accessed by malicious extensions in the user's browser, or simply just sent to third party websites as part of the Referer header.
+With the Access Token included in the URL, they will be visible in browser history.  
 
-2) Compromised Browser storage 
+The full URL can also be unwittingly sent on to third party websites as part of the Referer header, if client site's Referrer Policy headers are not configured to prevent this.
 
-Since the Access Token is stored within the browser, it is succeptible to XSS attacks that will access browser storage.
+2) Lack of refresh mechanism
 
-3) No refresh tokens
+Implicit Flow does not implement any refresh mechanism and doesn't provide refresh_tokens. 
 
-Implicit flow does not implement refresh tokens, requiring either long-lived (and therefore more vulnerable) Access Tokens or frequent user re-authorization. More user authorization requests amplifies the vulnerability of URL exposure.
+To avoid frequent user re-authorization, the token must be long-lived and stored in browser localStorage. LocalStorage is relatively secure inaccessible from external processes. However as the data stored is persistent, there is a larger window of opportunity for malicious code - whether through an XSS attack or a device compromised by a malicious user, to access sensitive data such as the Access Token.
 
-Improving SPA security using Authorization Code Flow with PKCE
+If tokens are short-lived, frequent user authorization requests are needed, and this could provide a greater opportunity for interception. 
+
+Requiring users to frequently re-authenticate and re-authorize is also detrimental to user experience, especially when the authentication process involves MFA for example.
+
+3) Redirect URL Interception
+
+With the Access Token fully exposed in the post-authorization redirection URL, it provides a significant attack vector, far removed from the underlying Implicit Flow process, making potential exploits difficult to predict and defend against.
+
+For example, on older Android and iOS operating systems, a vulnerability existed where multiple apps could be registered to handle the same custom URL scheme e.g. mycustomapp://. A malicious app could in some circumstances intercept a redirection using a scheme intended for a legitmate app, accessing any data in the URL.
+
+#### Deprecation
+
+Due to its inherent vulnerabilities, OAuth 2.0 Implicit Flow has been deprecated, although it is still supported by many service providers, including [Spotify](https://developer.spotify.com/documentation/web-api/tutorials/implicit-flow) and [Microsoft Identity Platform](https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-implicit-grant-flow#prefer-the-auth-code-flow).
+
+Instead Authorization Code Flow with PKCE is now the recommended standard for applications that cannot securely store a client secret.
+
+Applications implementing Authorization Code Flow with PKCE avoid or mitigate the inherent vulnerabilities of Implicit Flow.
+
+
+#### Additional authorization code step
+
+Unlike implicit flow, Authorization Code Flow with PKCE includes the intermediate step of providing the client with an authorization code that is later used to exchange for Access Tokens. 
+
+Access Tokens are obtained with an AJAX request to a token-exchange endpoint on the authentication server, which has the sole purpose of certifying a request's authorization code and returning an Access Token. This means the Access Token is not exposed to browser history, referer headers, or malicious browser extensions/scripts. 
+
+Contrast this with implicit flow where the Access Token is returned in a full page redirection URL, visible to the user and stored in browser history.
+
+The PKCE token exchange mechanism can also return refresh tokens giving the same [user-experience benefits](#### Obtaining-fresh-Access-Tokens-with-a-Refresh-Token
+) as server-based Authorization Code Flow.
+
+#### Securing the authorization code-Access Token exchange 
+
+In the traditional Authorization Code Flow for server-backed client apps, when exchanging the authorization code for an Access Token, the client secret is included so that the authorization server knows the request originated from client server and can be trusted.
+
+With SPAs, there is no way to either distribute or store an app-specific client secret securely on the browser.
+
+Authorization Code Flow with PKCE uses a mechanism to certify that an Authorization Code-Access Token request belongs to the same user and client app instance that initiated the authorization process.
+
+This is what the 'PKCE' (Proof Key for Code Exchange) part of the process is.
+
+Authorization Code Flow with PKCE:
+
+1)
+The client app must first register with the service provider, with a client_id and a redirect_uri.
+
+2)
+When the user initializes the authorization process, first the client app uses a [CSPRNG](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator) to generate a unique string called the 'code_verifier'.
+
+Then a 'code_challenge' is generated from the 'code_verifier', typically using a secure hash function like SHA-256.
+
+The user's browser is then redirected to the authorization server, with the code_challenge and the method used to generate the code_challenge included in the URL:
+
+```
+https://authorization-server.com/authorize?response_type=code&client_id=CLIENT_ID&redirect_uri=REDIRECT_URI&scope=SCOPE&state=STATE&code_challenge=CODE_CHALLENGE&code_challenge_method=S256
+```
+
+
+As with traditional Authorization Code Flow, the redirect_uri is included to be checked with the one registered, as a security measure to prevent bogus requests redirecting the user to malicious sites or clones of the client app.
+
+State is provided to [protect against CSRF attacks] (*** where state is described ***)
+
+3)
+
+The user then authenticates and grants the client app the requested scope permissions.
+
+The authorization server then creates a temporary Authorization Code, and temporarily saves the code_challenge and the code_challenge_method with this Authorization Code. Later these will be used to verify the token exchange request belongs to the same client and user that inititated the process.
+
+The authorization server then redirectes the browser back to the client app with the temporary Authorization Code:
+
+```
+https://my-pkce-client-app.com/callback?code=AUTHORIZATION_CODE&state=STATE
+```
+
+4) Token Exchange
+
+The client app now makes an AJAX POST request to the authorization server's token exchange endpoint, with the Authorization Code and the code_verifier included in the URL-encoded form data:
+
+```
+    POST /token HTTP/1.1
+    Host: authorization-server.com
+    Content-Type: application/x-www-form-urlencoded
+
+    grant_type=authorization_code&code=AUTHORIZATION_CODE&redirect_uri=REDIRECT_URI&client_id=CLIENT_ID&code_verifier=CODE_VERIFIER
+```
+
+Since the authorization server knows the code_challenge and code_challenge_method, it will apply the code_challenge_method to the code_verifier to confirm it matches the original code_challenge, and can trust the request.
+ 
+It then returns a JSON response with the Access Token, along with a refresh_token if supported:
+
+```json
+    {
+      "access_token": "ACCESS_TOKEN",
+      "token_type": "bearer",
+      "expires_in": EXPIRES_IN,
+      "refresh_token": "REFRESH_TOKEN",
+      "scope": "SCOPE"
+    }
+```
+
+5) 
+
+The post-authorization situation is now similar to that of traditional Authorization Code Flow.
+
+The client app can now access their authorized resources with the Authorization: Bear <Access Token> header, with token refresh capabilities if provided.
+
+
+*****
+
+2) Lack of secure or convenient storage options
+
+With Implicit Flow, the Access Token must be sent in the URL. This means storing it as an HttpOnly cookie, inaccessible to javascript and hence XSS, is not an option.
+
+Session and in-memory storage are options, but they are both still vulnerable to XSS, and inconvenient for the user as they require reauthentication with the authorization server whenever the browser is restarted.
+
+Finally localStorage does persist the token across browser-sessions, but the Access Token is vulnerable access from malicious users of the same device, especially considering that Implicit Flow does not implement refresh tokens 
+
+
+ from token-exchange endpoint the the client secret 
+
+is stored securely on the server and sent to the token-exchange endpoint
 
 
 
 
- than a server with standard security best practices, especially if there server is properly implementing additional security mechanisms such as cloud-based secure vaults.
+An app implmenting Authorization Code Flow with PKCE generates a random, cryptographly secure verification code at the beginning of each authorization process. 
 
 
 
-This flow is designed for browser-only applications (such as SPAs) without a server backend. The browser cannot be relied upon to store client secrets securely.
+ addresses the URL exposure vulnerability of Implicit Flow by including 
 
-...
 
-3) Resource Owner Password Credentials (ROPC)
 
-This flow allows a client app to receive a user's credentials unencrypted, and use them directly to obtain an access token. While generally not suitable for third-party app authorization across the open internet, it can be used when the client application is trusted and operates within a closed network.
 
-4) Client Credentials Flow
-
-For non-user-based applications to authenticate themselves and access resources. These client applications have their own credentials that they use to gain access tokens for resource access.
-
-5) Device Authorization Flow
-
-You have used this flow if you've ever logged in to a streaming service on a smart TV by scanning a QR code with your mobile. The QR code opens the service website with a preset code, and after you authenticate, the client app (being the streaming app on the smart TV) receives an access token.
-
-6) Refresh Token Flow
-
-This flow is used to improve user experience in other flows. When a client app receives an access token, they may also receive a refresh token. The refresh token allows the client app the receive new access tokens without needing to reauthenticate. 
 
 
 
