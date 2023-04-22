@@ -395,12 +395,50 @@ The client application should be server-based to store their credentials securel
 
 5) Device Authorization Flow
 
-You have used this flow if you've ever logged in to a streaming service on a smart TV by scanning a QR code with your mobile. The QR code opens the service website with a preset code, and after you authenticate, the client app (being the streaming app on the smart TV) receives an access token.
+Device Authorization Flow is designed for authorizing client apps that run on a different device than one the user will use to interact with the authorization server.
 
-6) Refresh Token Flow
+A typical use case looks like:
 
-This flow is used to improve user experience in other flows. When a client app receives an access token, they may also receive a refresh token. The refresh token allows the client app the receive new access tokens without needing to reauthenticate. 
+1) A user has an existing account with a streaming service (e.g. Netflix).
 
+2) They have a smart TV with the service's app installed.
+
+3) They wish to authorize this app to use their account (essentially just authenticating with the app).
+
+4) They could authenticate manually through the app, but the user interface on the TV is difficult to use, so instead they authenticate on a user-friendlier device such as their mobile device. Device Authorization Flow is the process that enables this.
+
+A simplified version of the Device Authorization Flow process works as follows:
+
+The streaming app is prompted by the user to authorize.
+
+The streaming app sends a request to the authorization server to initiate the authorization process.
+
+The authorization server:
+
+1) Geneates a random device code to identify streaming app device being authorized.
+
+2) Geneates a random user code identifying the authorization process being started.
+
+3) Stores these together on the server temporarily, as they will be needed for later verification when the user completes authorization.
+
+4) Sends the streaming app the URL the user must navigate to on their mobile device, including the user code, and the device code:
+
+{
+  "device_code": "DEVICE_CODE",
+  "authorization_url": "https://authorization.streaming-service.com/user-auth-page?USER_CODE",
+}
+
+
+The device begins making polling requests to the authorization server in the background, asking if the device code has been authorized yet. 
+
+
+The authorization URL can be rendered on the TV as a QR code, that the user can open on their mobile device. The authorization URL will be specific to the streaming service, it will open the streaming service's login page in the browser or the streaming service mobile app itself.  
+
+When the user authenticates, or if they are already authenticated, they will simply be asked if they wish to authorize the device app to use their account.
+
+When the user confirms, the authorization server looks up the device code for the user in its memory, verifies it matches the device code in the polling requests, and returns an Access Token to the streaming app. 
+
+The Access Token then allows the streaming app access to the user's account.
 
 
 
