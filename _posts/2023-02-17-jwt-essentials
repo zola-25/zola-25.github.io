@@ -8,13 +8,13 @@ series_title: "Web Security"
 series_number: 4
 ---
 
-JWT tokens are used for communicating information between different applications and services, with properties that enable the receiver certify the information in the JWT is authentic and has not be tampered with.
+JWT tokens are used for communicating information between different applications and services, with properties that enable the receiver to certify the information in the JWT is authentic and has not be tampered with.
 
-We will explain their implentation here, as they are a necessary part of OIDC authorization, which we will cover later.
+We will explain their implementation here, as they are a necessary part of OIDC authorization, which we will cover later.
 
 JWT tokens themselves are simple to construct, consisting of three parts:
 
-1. The header, a JSON object specifying the type of token and the algorithm used to sign the token to prove its authenticity:
+1. The header is a JSON object specifying the type of token and the algorithm used to sign the token, proving its authenticity:
 
 	```json
 	{
@@ -25,7 +25,7 @@ JWT tokens themselves are simple to construct, consisting of three parts:
 
 2. The payload, a JSON object containing the relevant information being transfered. 
 
-	The JSON fields specified can contain standardized fields such as `sub`, which usually means an identifier corresponding to the principal subject of the token, such as a user ID, and `exp`, which means the date and time after which the JWT is no longer valid. 
+	The JSON object can contain standardized fields such as `sub`, which usually means an identifier corresponding to the principal subject of the token, such as a user ID, and `exp`, which means the date and time after which the JWT is no longer valid. 
 
 	Custom, 'private' fields with data only relevant to the ecosystem the JWT was created for can also be included:
 
@@ -37,7 +37,7 @@ JWT tokens themselves are simple to construct, consisting of three parts:
 	}
 	```
 
-3. The signature, a unique ID created using:
+3. The signature, a unique ID generated using:
 	
 	i. The algorithm specified by `alg`
 	ii. A secret key known only by the communicating parties
@@ -71,7 +71,7 @@ i.e. [Header in base64Url].[Payload in base64Url].[Signature]
 
 #### JWT Advantages
 
-By including the signature, any party with the secret that receives the JWT can recreate the signature and compare it to the JWT's signature - if they match, the party can be confident the Header and Payload information is authentic and has not been tampered with.
+By including the signature, any party with the secret that receives the JWT can recreate the signature and compare it to the JWT's signature - if they match, the party can be confident that the Header and Payload information is authentic and has not been tampered with.
 
 JWTs can also use asymmetric signing algorithms that utilize a public/private key pair. The private key is still used to create the signature and kept secret by the server, but the public key can be published openly and used by any party to verify the authenticity of the JWT claims.
 
@@ -85,7 +85,7 @@ They also can be used to share the user's authentication state and other identit
 
 #### JWT Challenges
 
-Since JWTs are stateless by design, with no dependence on a particular server or issuing authority for their validity, changing any user state can be difficult. This is especially challenging if the JWT is trusted and read by multiple services. 
+JWTs are stateless by design, storing user state information themselves instead of relying on a server-side session. With no dependence on a particular server or issuing authority for their validity, changing any user state can be difficult. This is especially challenging if the JWT is trusted and read by multiple services. 
 
 For example, if JWTs need to be revoked for certain users, it would mean maintaining a blacklist of revoked tokens, and sharing this across all resources that trust the JWT. This rather defeats the purpose and advantages of using stateless tokens to represent user state.
 
@@ -114,4 +114,7 @@ There are several reasons to avoid including sensitive information in the JWT:
 
 3. If used as part of a larger service ecosystem, JWTs may end up being sent in many HTTP requests, increasing their exposure to interception.
 
-Instead of using JWTs to hold sensitive information, [JWE tokens](https://datatracker.ietf.org/doc/html/rfc7516) can be used to secure payload data. However they have a more complex implementation than JWTs, requiring more resources to generate and verify, and are much larger than standard JWTs.
+To securely store sensitive information in JWTs, a related technology called [JWE tokens](https://datatracker.ietf.org/doc/html/rfc7516) can be used to encrypt the JWT payload. 
+
+JWEs add additional complexity to a JWTs alone, requiring more resources to generate and verify, and resulting in larger tokens than standard JWTs. However, the benefit of preventing unauthorized access to the JWT payload often justifies the additional resources required. 
+
