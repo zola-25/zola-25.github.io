@@ -189,4 +189,5 @@ On logout, the sessionId is removed:
 
 <img width="371" alt="image" src="https://user-images.githubusercontent.com/29863888/235347967-969fc19c-5fea-4718-a3fb-51d750db939d.png">
 
+<a href="https://gist.github.com/zola-25/5a814b7f1bf28840ee939ba45776c723" target="_blank">Code Gist</a>
 
