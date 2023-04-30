@@ -46,79 +46,106 @@ The session ID cookie should only contain the randomly generated session ID, and
 
 6. Max-Age, Expires - The session ID cookie should not be set with Max-Age or Expires attributes. These persist the cookie beyond the browser session, storing the cookie on the device and potentially enabling malicious software access to the session ID.
 
+
+### Ensuring session ID invalidation
+
+Session IDs should expire and be removed from server storage after a set period of time. This helps prevent scenarios where an authenticated user leaves their device with the browser still open, allowing another - potentally malicous - user to use the device to access sensitive content.
+
+Additionally, sites should provide authenticated users with a logout mechanism that acts to remove or invalidates the session ID on the server.
+
 ### Library-free implementation in ASP.NET Core
 
 ```csharp
-public static class InMemoryDataStore
+
+namespace WebApplication6.Controllers
 {
-	public static readonly Dictionary<string, string> UserSessions = new();
-	public static readonly Dictionary<string, string> UserCredentials = new() { { "user1", "password1" }, { "user2", "password2" } };
+    public static class InMemoryDataStore
+    {
+        public static readonly Dictionary<string, string> UserSessions = new();
+        public static readonly Dictionary<string, string> UserCredentials = new() { { "user1", "password1" }, { "user2", "password2" } };
+    }
+
+    public class Credentials
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class HomeController : Controller
+    {
+        [HttpGet]
+        public IActionResult Index()
+        {
+            string? sessionId = HttpContext.Request.Cookies["sessionId"];
+            bool isLoggedIn = sessionId != null && InMemoryDataStore.UserSessions.ContainsKey(sessionId);
+
+            if (isLoggedIn)
+            {
+                var username = InMemoryDataStore.UserSessions[sessionId!];
+
+                return View(model: username);
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+        }
+
+        [HttpGet("Login")]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost("Login")]
+        public IActionResult LoginSubmit([FromForm] Credentials credentials)
+        {
+            string username = credentials.Username;
+            string password = credentials.Password;
+
+            if (InMemoryDataStore.UserCredentials.ContainsKey(username) && InMemoryDataStore.UserCredentials[username] == password)
+            {
+                string sessionId = GenerateSessionId();
+                InMemoryDataStore.UserSessions.Add(sessionId, username);
+                
+                HttpContext.Response.Cookies.Append("sessionId", sessionId, new CookieOptions()
+                {
+                    Secure = true,
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                    Path = "/"
+                });
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Unauthorized("Invalid username or password. Please try again.");
+            }
+        }
+
+        [HttpPost("Logout")]
+        public IActionResult Logout()
+        {
+            string? sessionId = HttpContext.Request.Cookies["sessionId"];
+            if (sessionId != null && InMemoryDataStore.UserSessions.ContainsKey(sessionId))
+            {
+                InMemoryDataStore.UserSessions.Remove(sessionId);
+                HttpContext.Response.Cookies.Delete("sessionId");
+            }
+            return RedirectToAction("Login");
+        }
+
+
+        string GenerateSessionId()
+        {
+            byte[] randomBytes = RandomNumberGenerator.GetBytes(32);
+            return Convert.ToBase64String(randomBytes);
+        }
+    }
 }
-
-public class Credentials
-{
-	public string Username { get; set; }
-	public string Password { get; set; }
-}
-
-public class HomeController : Controller
-{
-	[HttpGet]
-	public IActionResult Index()
-	{
-		string? sessionId = HttpContext.Request.Cookies["sessionId"];
-		bool isLoggedIn = sessionId != null && InMemoryDataStore.UserSessions.ContainsKey(sessionId);
-
-		if (isLoggedIn)
-		{
-			var username = InMemoryDataStore.UserSessions[sessionId!];
-
-			return Content($"Welcome {username}, you are authorized");
-		}
-		else
-		{
-			return RedirectToAction("Login");
-		}
-	}
-
-	[HttpGet("Login")]
-	public IActionResult Login()
-	{
-		return View();
-	}
-
-	[HttpPost("Login")]
-	public IActionResult LoginSubmit([FromForm] Credentials credentials)
-	{
-		string username = credentials.Username;
-		string password = credentials.Password;
-
-		if (InMemoryDataStore.UserCredentials.ContainsKey(username) && InMemoryDataStore.UserCredentials[username] == password)
-		{
-			string sessionId = GenerateSessionId();
-			InMemoryDataStore.UserSessions.Add(sessionId, username);
-			
-			HttpContext.Response.Cookies.Append("sessionId", sessionId, new CookieOptions()
-			{
-				Secure = true,
-				HttpOnly = true,
-				SameSite = SameSiteMode.Strict
-			});
-
-			return RedirectToAction("Index");
-		}
-		else
-		{
-			return Unauthorized("Invalid username or password. Please try again.");
-		}
-	}
-
-	string GenerateSessionId()
-	{
-		byte[] randomBytes = RandomNumberGenerator.GetBytes(32);
-		return Convert.ToBase64String(randomBytes);
-	}
 ```
+
 With the simple login form:
 
 ```html
@@ -137,8 +164,39 @@ With the simple login form:
 </form>
 ```
 
-### Ensuring session ID invalidation
+And restricted homepage, only accessible if logged in, allowing the ability to logout:
 
-Session IDs should expire and be removed from server storage after a set period of time. This helps prevent scenarios where an authenticated user leaves their device with the browser still open, allowing another - potentally malicous - user to use the device to access sensitive content.
 
-Additionally, sites should provide authenticated users with a logout mechanism that acts to remove or invalidates the session ID on the server.
+`Index.cshtml`
+
+```html 
+@model string
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Restricted Page</title>
+</head>
+<body>
+    <h1>Restricted Home Page</h1>
+    Welcome @Model, you are authorized.
+
+    <h2>Logout?</h2>
+    <form method="post" asp-action="Logout">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>
+
+```
+
+On successful login, the server responds with the set-cookie header with sessionId and the necessary attributes:
+
+<img width="592" alt="image" src="https://user-images.githubusercontent.com/29863888/235347904-f8b42b86-1c38-4775-9e33-46f08ce0492d.png">
+
+On logout, the sessionId is removed:
+
+<img width="371" alt="image" src="https://user-images.githubusercontent.com/29863888/235347967-969fc19c-5fea-4718-a3fb-51d750db939d.png">
+
+
