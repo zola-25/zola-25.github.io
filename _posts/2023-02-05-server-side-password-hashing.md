@@ -4,7 +4,7 @@ permalink: /post/server-side-password-hashing
 layout: default
 tags: authentication password hash SHA-1 SHA-256 salt PBKDF2 bcrypt scrypt rainbow
 is_series: true
-series_title: "Password Hashing"
+series_title: "Web Security"
 series_number: 2
 ---
 
@@ -55,22 +55,17 @@ Write-Output "`nHash of $inputString in base64: $base64String"
 
 (<a href="https://gist.github.com/zola-25/4da0aea2421c1b11a16c5d265416bb98" target="_blank">Gist</a>)
 
-Hash of Password124 in 256 bit binary: 
-
-```
-00000000100011000111000000111001001011100011101010111111101111010000111110100100011110111011110000
+Hash of Password123 in 256 bit binary: `00000000100011000111000000111001001011100011101010111111101111010000111110100100011110111011110000
 10111011011001011010101010100110011011110101001001111000010101100101110010011111111100101110100000111100101110011010101011111010110011101
-010011101011000000001
-```
+010011101011000000001`
 
-Hash of Password124 in base64: `AIxwOS46v70PpHu8LtlqqZvUnhWXJ/y6Dy5qvrOp1gE=`
+Hash of Password123 in base64: `AIxwOS46v70PpHu8LtlqqZvUnhWXJ/y6Dy5qvrOp1gE=`
 
 This hash is a simple fixed length string of different characters, and has the appearence of being randomly generated, although it is not. 
 
 If the password differs only slightly, perhaps by one character, the CHF produces a hash with a completely different set of characters - this is a property all CHFs have and is called the [avalanche effect](https://en.wikipedia.org/wiki/Avalanche_effect).
 
-For example, if our password is instead "Password12**4**", the SHA-256 hash in base64 becomes `
-UawBynkjzYgRe3aBNDuR0h0/a65csNlJYnCZ/AL0ubw=`
+For example, if our password is instead "Password12**4**", the SHA-256 hash in base64 becomes `UawBynkjzYgRe3aBNDuR0h0/a65csNlJYnCZ/AL0ubw=`
 
 CHFs are designed to ensure a 'uniform distribution' of hash value character string combinations. As long as we use a strong, industry-proven CHF that creates sufficently large hash values - 256 bits is considered large enough for most use cases - each possible hash value is equally probable of being computed for a password.
 
