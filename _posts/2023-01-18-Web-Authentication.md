@@ -7,9 +7,9 @@ tags: authentication basic jwt session HTTP HTTPS privacy
 
 ### HTTP Basic Access Authentication
 
-Basic Access Authentication is probably the simplest authentication method to implement.
+Basic Access Authentication is probably the simplest authentication scheme to implement.
 
-When an unauthenticated user tries to access a restricted resource, the server responds with a 401 and a WWW-Authenticate response header field, with the header value 'Basic realm="[Name given to resource user is trying to access]"'.
+When an unauthenticated user tries to access a restricted resource, the server responds with a 401 Unauthorized status and a WWW-Authenticate response header field, with the header value 'Basic realm="[Name given to resource user is trying to access]"'.
 
 The realm here is required and serves as an identifier for the part of the site the user is trying to access - for example there could be other realms that serve different resources that the user may, or may not, be authorized to view.
 
@@ -40,12 +40,11 @@ app.MapGet("/", (HttpContext httpContext) =>
 {
     if (!HasAuthorizationHeader(httpContext))
     {
-        if (!httpContext.Request.Headers[HeaderNames.Authorization].Any())
-        {
-            httpContext.Response.Headers.Add(HeaderNames.WWWAuthenticate,
-                new StringValues(new[] { "Basic", "realm=\"User Visible Realm\", charset=\"UTF-8\"" }));
-            return Results.Unauthorized();
-        }
+
+		httpContext.Response.Headers.Add(HeaderNames.WWWAuthenticate,
+			new StringValues(new[] { "Basic", "realm=\"User Visible Realm\", charset=\"UTF-8\"" }));
+		return Results.Unauthorized();
+
     }
 
     var authorizationHeaders = httpContext.Request.Headers[HeaderNames.Authorization];
@@ -79,10 +78,6 @@ app.MapGet("/", (HttpContext httpContext) =>
 
 app.Run();
 
-bool HasAuthorizationHeader(HttpContext httpContext)
-{
-    return httpContext.Request.Headers.ContainsKey(HeaderNames.Authorization);
-}
 ```
 
 Note the additional charset="UTF-8" returned in the WWWAuthenticate response header is used to specify the acceptable encoding for the username and password.
@@ -97,6 +92,153 @@ The credentials are stored in the browser's process memory and usually inaccessi
 
 However, some modern browsers may prompt the user to store the credentials in their built-in password storage, as they would when a user first enters credentials into a more typical form-based login page.
 
+## Storing User Credentials Securely on the Server with Password Hashing
+
+Real world applications that implement their own authentication process (e.g. user accounts with sign-in forms) must ensure user passwords are secured, and unreadable in the event the server is compromised.
+
+Password hashing enables a user to verify a password provided by the user without the app's server ever having stored the password. The server instead stores a hash of the password, which is computationally infeasibile to translate back to the user's plaintext password - assuming the hashing process correctly implemented with a strong hashing algorithm.
+
+### Implementation [^note on detail]
+
+#### Application setup
+
+Let's assume we've created a web app requiring user authentication.
+
+The authentication is implemented by the application. We're not outsourcing authentication to an Identiy Provider in this example, since we're demonstrating password security itself.
+
+The user first creates an account by submitting their email and password securely in plaintext. 
+
+The server typically creates an entry in its database for the user and stores their email, usually for a variety of verification and recovery proposes, but for this example it's only required along with their password to prove the the user is authentic when they make a login request.
+
+#### Simple Hashing Implementation
+
+The password itself is not saved. Instead it is input to a type of algorithm called a [Cryptographic Hash Function](https://en.wikipedia.org/wiki/Cryptographic_hash_function) (CHF) which then returns its corresponding 'hash' value as a sequence of bits of fixed length, the length dependent on the CHF used - typically 256 bits. 
+
+For readability and convenience this is often converted to its base64 equivalent, resulting in a fixed length string of 44 characters, with no discerable pattern or structure. 
+
+We can demonstrate the hash created for the password "Password123" using the SHA-256 hash function:
+
+```pwsh
+$inputString = "Password123"
+
+$sha256 = [System.Security.Cryptography.SHA256]::Create()
+$bytes = [System.Text.Encoding]::UTF8.GetBytes($inputString)
+$hashBytes = $sha256.ComputeHash($bytes)
+
+$base64String = [System.Convert]::ToBase64String($hashBytes)
+
+$binaryString = [System.Text.StringBuilder]::new()
+foreach ($byte in $hashBytes) {
+    $binaryString.Append([Convert]::ToString($byte, 2).PadLeft(8, '0'))
+}
+
+Write-Output "`nHash of $inputString in 256 bit binary: $binaryString"
+
+Write-Output "`nHash of $inputString in base64: $base64String"
+```
+
+We get:
+
+```
+0000000010001100011100000011100100101110001110101011111110111101000011111010010001111011101111000010111011011001011010101010100110011011110101001001111000010101100101110010011111111100101110100000111100101110011010101011111010110011101010011101011000000001
+```
+
+or in base64:
+
+```
+AIxwOS46v70PpHu8LtlqqZvUnhWXJ/y6Dy5qvrOp1gE=
+```
+
+This hash is a simple fixed length string of different characters, with no discerable pattern or structure, and has the appearence of being randomly generated, although it is not. 
+
+If the password differed only slightly, perhaps by one character, the CHF would produce a hash with a completely different set of characters - this is a property all CHFs have and is called the [avalanche effect](https://en.wikipedia.org/wiki/Avalanche_effect).
+
+For example, if our password is instead "Password12**4**", the SHA-256 hash in base64 becomes:
+
+```
+UawBynkjzYgRe3aBNDuR0h0/a65csNlJYnCZ/AL0ubw=
+```
+
+CHFs are designed to ensure a 'uniform distribution' of hash value character string combinations. As long as we use a secure, industry-proven CHF that creates sufficently large hash values - 256 bits is considered large enough for most use cases - each possible hash value is equally possible of being the one computed for a password.
+
+256 bit hash values means $2^256$ possible hash values, each one having a probability of $1/2^256$ of being chosen, which is [effectively impossible to guess](https://crypto.stackexchange.com/a/45310).
+
+It's important to note that this doesn't imply randomness in the CHF - the algorithm is deterministic and for a known plaintext password, exactly one of the $2^256$ possible hashes will have a 100% probability of being generated.
+
+Storing passwords as hashes is intended to ensure the plaintext password is unknowable when stored on the server. When a user wants to authenticate with the application, for example through a sign-in form, they send their password as plaintext to the app's server. The server converts it into its unique hash and compares it to the existing hash stored for that user. Matching hashes proves the password matches the one the provided in the sign-up process, so the user is considered authentic, and the sign-in is authorized.
+
+#### Simple Hashing Vulnerabilities
+
+The previous example demonstrates a rudimentary approach to securing passwords through hashing. When hashing was introduced as a security measure, over time vulnerabilities in the process became evident:
+
+1) **Pre-computing hashes**
+
+   Because each password always generates the same hash, they are vulnerable to exploits where an attacker attacker pre-computes and stores hash/password combinations. The number of possible password/hash combinations makes it unrealistic to generate all conceivable combinations, but optimizations that trade increased password lookup time for storage size can be used instead to make such attacks feasible, such as ([rainbow tables](https://en.wikipedia.org/wiki/Rainbow_table#Precomputed_hash_chains)).
+
+
+2) **Collision attacks**
+
+   Some hashing algorithms have been proven to be at risk of generating the same hash for two different passwords, allowing an attacker gain access by finding a string with a hash that matches that of an existing user's password.
+
+   Older hashing algorithms such as MD5 and SHA-1 have been demonstrated to be have this vulnerability and are now considered insecure for use as password security. Modern hashing algorithms like SHA-256 are much more resistant to collision attacks, though no hashing algorithm can ever be entirely immune.
+
+### Secure Cryptographic Hash Function
+
+Modern password hashing is uses Secure Cryptographic Hash Functions. These Secure CHFs have advantages over traditional CHFs:
+
+1. **Eliminating collision attacks**<br/>
+   <br/>
+   The likelihood of hash collisions is so low, it becomes computationally infeasible to identify a collision using modern technology, making Secure CHFs very resistant to collision attacks.
+
+2. **Adaptability**<br/>
+   <br/>
+   Secure CHFs can allow the adjustment of the computational resources needed to derive a hash. This is designed to make the generation of vast amounts of password/hash combinations computationally impractical for an attacker, while ensuring the hash generation speed for legitimate purposes is practical.
+
+3. **Mitigating against rainbow and dictionary attacks with password salting**<br/>
+   <br/>
+   A salt is a random value added to the password before hashing, which is then stored, unencrypted, with the resulting hash. For later password verification, the hash is recreated for comparison by including the salt as before.
+
+   Password salting ensures:
+   
+   * Unique hashes for identical passwords  
+     
+     This prevents an attacker from identifying duplicate passwords in a database
+     
+   * Pre-computation attack protection  
+     
+     Pre-computation attacks and their variants are massively more resource and time-intensive, as an attacker must compute hashes for each possible salt-password combination, which is exponentially larger than for just passwords.
+
+***
+
+While there are CHFs that are secure against collision attacks, like SHA-256, only CHFs that provide all of the above advantages are considered 'Secure Cryptographic Hash Functions', making them suitable for modern-day password security. Such Secure CHFs include PBKDF2, bcrypt and PBKDF2. The ASP.NET Core Identity framework uses PBKDF2.
+
+CHFs like SHA-256 are designed to be fast, and are used for other purposes than password hashing, whereas Secure CHFs are designed to be slow for attack prevention. 
+
+Secure CHFs often use algorithms such as SHA-256 as a part of their algorithm.
+
+
+#### Dictionary-attack Example with Salting and Computation Adjustment
+
+Even in the event the user database is compromised, there are additional properties of the hashing process that can prevent an attacker from cracking the hashed passwords. 
+
+First let's demonstrate dictionary attack on a compromised database. In a dictionary attack, the attacker has a large list of common, 'guessable' passwords. The database will include all password hashes along with each hash's unique salt that was used to generate it by the hashing function. 
+
+If the attacker knows the hashing algorithm, they input a guessable password, along with one of the database's salts, and see if the resulting hash matches the hash in the database created from the salt.
+
+The full attack involves attempting every guessable password with every database salt.
+
+Some dictionary attacks attempt millions of common passwords. So if we consider the scenario where the attacker has one million guessable passwords, and a compromised database of 10000 hashes and salts, the attacker would run the hashing algorithm 10 billion times in an attempt to generate a hash that matched one in the database. If they found a match, they'd have found the genuine password that corresponded to that hash.
+
+10 billion hash creations is obviously a lot, but the feasibility of such an attack depends on the execution time of the particular hash algorithm. Strong CHFs are designed to be computationally resource intensive, making them sufficiently slow, which helps mitigate against this kind of dictionary attack and other 'brute-force' methods. 
+
+Ideally they are slow enough to mitigate these attacks but not so slow that their legitmate uses are affected, like fast credential verification for authentication, so typically these algorithms are configured to generate a hash in 0.1-1 seconds. 
+
+In our dictionary attack example, a 0.5 second hash time would take 158 years to test all one million guessable passwords.
+
+Once an algorithm's computational parameters have been set, they cannot be changed without changing the algorithm's hash outputs. So if an attacker changes the paramters to be much faster, so they can test a massive numbers of potential passwords as quickly as possible, the adjusted algorithm will just create different hashes than the unadultered algorithm that originally generated the hashes.
+
+
+[^note on detail]: There's a lot of raw implementation here, expecially when it helps demonstrate a whole bunch of vulnerabilities, exploits, mitigations, an essential time-savers that a developer ever mixed-up in authentication might want to know about.
 
 ### Authentication with Session Cookies
 
@@ -724,6 +866,58 @@ The post-authorization situation is now similar to that of traditional Authoriza
 
 The client app can now access their authorized resources with the Authorization: Bear <Access Token> header, with token refresh capabilities if provided.
 
+## OpenID Connnect - OAuth 2.0 for Authentication
+
+When OAuth 2.0 was developed, it was focused on providing a secure and standardized framework for allowing users to authorize third-party apps without sharing credentials.
+
+OAuth 2.0 had no features specifically for authenticating users with third-party apps via identity providers, to say nothing for administering user roles, claims, and other attributes.
+
+Originally, after OAuth 2.0 gained adoption, developers created their own custom solutions to include authentication. However, these solutions often differed significantly, sometimes leading to inconsistent or insecure implementations.
+
+In response the OpenID Foundation developed a standardized protocol for Authentication with OAuth 2.0 called OpenID Connect (OIDC).
+
+OIDC has been widely adopted and is supported by most identity providers and technology ecosystems including Google and Microsoft.
+
+Since it is built on OAuth 2.0 protocols, knowledge of OAuth 2.0 flows makes it easy to understand OIDC too.
+
+In fact, the changes needed to use OIDC with Authorization Code Flow or Authorization Code Flow with PKCE are so simple we can cover them together in just a few lines.
+
+First, for your user's URL directing them to the authorization server, we just need to make sure 'openid' in included in the 'scope' parameter:
+
+https://authorization-server.example.com/authorize?
+  response_type=code&
+  client_id=client123&
+  scope=openid%20profile%20email&
+  redirect_uri=https%3A%2F%2Fclient-app.example.com%2Fcallback&
+  state=abc123
+
+Second, when the Access Token is received from authorization code exchange, the JSON payload also includes an 'id_token', a JWT containing the authorized user's identity details.
+
+
+### Authentication and Authorization in one flow
+
+So we've seen how to implement user authentication with OIDC, and how it's a simple extension of OAuth 2.0 Authorization Code Flows.
+
+And OAuth 2.0's function is enabling third-party apps to integrate with service providers and access protected resources, without holding user credentials.
+
+As a result, it becomes possible for a user to authenticate with an identity provider, and authorize access to a resource server, in one flow. 
+
+For example, we have built a third-party application that integrates with an e-commerce site. The e-commerce site has an API that allows authorized applications access to its 'resources', which we'll call functionality for this example. This is our resource server. 
+
+Our app is very useful for users of the e-commerce site, as it adds lots of additional funtionality and automation capabilities that the site lacks.
+
+The e-commerce site trusts Google as an identity provider and supports OAuth 2.0.
+
+Lets say User 1, an avid user of the e-commerce site, has a Google account, and our app uses Google as the identity provider. 
+
+With one user flow, User 1 can simultaneously login to our app by authenticating with Google, and also grant our client app permission to access certain features of the e-commerce site on their behalf. Since integrating with and improving those features is why User 1 likes our app!
+
+To achieve this, we need to make sure that the scopes we include in the initial authorization request include 'openid' for authentication, and the additional scope values defined by the e-commerce site that represent the features we wish to gain access to. The scope values need to be configured with the identity provider and resource server.
+
+Assuming the User 1 has granted authorization, the Authorization Code Flow will send the client app an Access Token specific for accessing features on behalf of User 1. Other users will have their own Access Tokens, possibly with different permissions, so these need to be stored and used appropriately for our app to function correctly for each user.
+
+
+
 
 *****
 
@@ -736,57 +930,3 @@ Session and in-memory storage are options, but they are both still vulnerable to
 Finally localStorage does persist the token across browser-sessions, but the Access Token is vulnerable access from malicious users of the same device, especially considering that Implicit Flow does not implement refresh tokens 
 
 
- from token-exchange endpoint the the client secret 
-
-is stored securely on the server and sent to the token-exchange endpoint
-
-
-
-
-An app implmenting Authorization Code Flow with PKCE generates a random, cryptographly secure verification code at the beginning of each authorization process. 
-
-
-
- addresses the URL exposure vulnerability of Implicit Flow by including 
-
-
-
-
-
-
-
-
-
-
-
-
-
-would redirect them to the first-party site's authentication process,
-
-
-
-When a user authenticates with the Identiy Provider, 
-
-to of allowing users of websites widely used, established digital ecosytems (such as Microsoft and Google) and 'Identity Provider' of Third-Party applications 
-
-
-### Standard authentication flows using JWT tokens
-
-
-
-
-The OAuth 2.0 framework recommends JWT tokens are sent from the client in the authorization header:
-
-`Authorization: Bearer [full JWT token]`
-
-This 
-
-There are work-arounds for this, which form part of 
-
-
-JSON Web Tokens (JWTs)
-
-
-https://www.youtube.com/watch?v=8haNjnq26K4
-
-** Javascript modules
