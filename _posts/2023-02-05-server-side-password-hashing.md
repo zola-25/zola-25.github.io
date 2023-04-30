@@ -24,15 +24,13 @@ The user first creates an account by submitting their email and password securel
 
 The server typically creates an entry in its database for the user and stores their email, usually for a variety of verification and recovery proposes - but for this example it's only required along with their password to prove the user is authentic when they make a login request.
 
-#### Simple Hashing Implementation
+### Simple Hash Implementation
 
 The password itself is not saved. Instead it is input to a type of algorithm called a [Cryptographic Hash Function](https://en.wikipedia.org/wiki/Cryptographic_hash_function) (CHF) which then returns its corresponding 'hash' value as a sequence of bits of fixed length, the length dependent on the CHF used - 256 bits in the SHA-256 algorithm we will demonstrate below. 
 
 For readability and convenience this is often converted to its base64 equivalent, resulting in a fixed length string of 44 characters (for 256 bits), with no discerable pattern or structure. 
 
 Using Powershell we can compute the SHA-256 hash for the password "Password123":
-
-
 
 ```powershell
 $inputString = "Password123"
@@ -73,7 +71,6 @@ SHA-256 generates have values of 256 bits in length, resulting in 2<sup>256</sup
 
 It's important to note that this doesn't imply randomness in the CHF - the algorithm is deterministic and for a known plaintext password, exactly one of the 2<sup>256</sup> possible hashes will have a 100% probability of being generated.
 
-
 #### Simple Hashing Vulnerabilities
 
 The previous example demonstrates a rudimentary approach to securing passwords through hashing. When hashing was introduced as a security measure, over time vulnerabilities in the process became evident:
@@ -91,7 +88,7 @@ The previous example demonstrates a rudimentary approach to securing passwords t
    
 A notable example of the vulnerabilities of simple hashing techniques is the [2012 LinkedIn data breach](https://en.wikipedia.org/wiki/2012_LinkedIn_hack). Passwords were stored [unsalted](#salting) using the compromised SHA-1 algorithm. The user database was leaked and a large proportion of passwords were cracked using rainbow tables and dictionary attacks.
 
-### Secure Cryptographic Hash Function
+### Secure Cryptographic Hash Functions
 
 Modern password hashing uses Secure Cryptographic Hash Functions. These Secure CHFs have advantages over traditional CHFs:
 
