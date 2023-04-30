@@ -8,8 +8,6 @@ series_title: "Web Security"
 series_number: 1
 ---
 
-### HTTP Basic Access Authentication
-
 Basic Access Authentication is probably the simplest authentication scheme to implement.
 
 When an unauthenticated user tries to access a restricted resource, the server responds with a 401 Unauthorized status and a WWW-Authenticate response header field, with the header value 'Basic realm="[Name given to resource user is trying to access]"'.
@@ -32,11 +30,66 @@ Otherwise a 401 or similar access denied response can be returned by the server.
 A simple ASP.NET Core example demonstrates the server logic, using the minimal API: 
 
 
-{% gist c1137903a6f7213422859e473faf1179 Program.cs %}
+```csharp
+var app = WebApplication.Create(args);
+
+string validUsername = "user1";
+string validPassword = "password123";
+
+
+app.MapGet("/", (HttpContext httpContext) =>
+{
+    if (!HasAuthorizationHeader(httpContext))
+    {
+        if (!httpContext.Request.Headers[HeaderNames.Authorization].Any())
+        {
+            httpContext.Response.Headers.Add(HeaderNames.WWWAuthenticate,
+                new StringValues(new[] { "Basic", "realm=\"User Visible Realm\", charset=\"UTF-8\"" }));
+            return Results.Unauthorized();
+        }
+    }
+
+    var authorizationHeaders = httpContext.Request.Headers[HeaderNames.Authorization];
+    if (authorizationHeaders.Count != 1)
+    {
+        return Results.Content("Expecting one Authorization header", statusCode: StatusCodes.Status401Unauthorized);
+    }
+
+    var authorizationHeader = authorizationHeaders[0]!;
+
+    if (!authorizationHeader.StartsWith("Basic "))
+    {
+        return Results.Content("'Basic ' authorization scheme expected", statusCode: StatusCodes.Status401Unauthorized);
+    }
+
+    var encodedCredentials = authorizationHeader.Replace("Basic ", String.Empty);
+
+    var decodedBytes = Convert.FromBase64String(encodedCredentials);
+    var credentials = Encoding.UTF8.GetString(decodedBytes).Split(":");
+    var username = credentials[0];
+    var password = credentials[1];
+
+    if (username == validUsername && password == validPassword)
+    {
+        return Results.Text("User Authorized! <br/> <br/> <b>The Permitted content authorized for user</b>", "text/html");
+    }
+
+    return Results.Content("Invalid credentials", statusCode: StatusCodes.Status401Unauthorized);
+
+});
+
+app.UseHttpsRedirection();
+
+app.Run();
+bool HasAuthorizationHeader(HttpContext httpContext)
+{
+    return httpContext.Request.Headers.ContainsKey(HeaderNames.Authorization);
+}
+```
 
 Note the additional charset="UTF-8" returned in the WWWAuthenticate response header is used to specify the acceptable encoding for the username and password.
 
-#### Security implications of Basic Access Authentication
+### Security implications of Basic Access Authentication
 
 Given that the user's credentials are transmitted unencrypted to the server, they should be transmitted through HTTPS instead of HTTP.
 
@@ -46,3 +99,4 @@ The credentials are stored in the browser's process memory and usually inaccessi
 
 However, some modern browsers may prompt the user to store the credentials in their built-in password storage, as they would when a user first enters credentials into a more typical form-based login page.
 
+<a href="https://gist.github.com/zola-25/c1137903a6f7213422859e473faf1179" target="_blank">Gist</a>
