@@ -10,7 +10,7 @@ series_number: 2
 
 Real world applications that implement their own authentication process (e.g. user accounts with sign-in forms) must ensure user passwords are secured, and unreadable in the event the server is compromised.
 
-Password hashing enables an application to verify a password provided by the user without the app's server ever having stored the password. The server instead stores a hash of the password, which is computationally infeasibile to translate back to the user's plaintext password - assuming a strong hashing algorithm is used correctly.
+Password hashing enables an application to verify a password provided by the user without the app's server ever having stored the password. The server instead stores a hash of the password, which is computationally infeasibile to reverse back to the user's plaintext password - assuming a strong hashing algorithm is used correctly.
 
 When a user's authenticity later needs to be verified, such as for a sign-in requrest, the password provided is then hashed using the same hashing algorithm, and verified that it matches the hash stored in the database.
 
@@ -67,7 +67,7 @@ For example, if our password is instead "Password12**4**", the SHA-256 hash in b
 
 CHFs are designed to ensure a 'uniform distribution' of hash value character string combinations. As long as we use a strong, industry-proven CHF that creates sufficently large hash values - 256 bits is considered large enough for most use cases - each possible hash value is equally probable of being computed for a password.
 
-SHA-256 generates have values of 256 bits in length, resulting in 2<sup>256</sup> possible hash values, each one having a probability of 1 / 2<sup>256</sup> of being chosen, which is [effectively impossible to guess](https://crypto.stackexchange.com/a/45310).
+SHA-256 generates hash values of 256 bits in length, resulting in 2<sup>256</sup> possible hash values, each one having a probability of 1 / 2<sup>256</sup> of being chosen, which is [effectively impossible to guess](https://crypto.stackexchange.com/a/45310).
 
 It's important to note that this doesn't imply randomness in the CHF - the algorithm is deterministic and for a known plaintext password, exactly one of the 2<sup>256</sup> possible hashes will have a 100% probability of being generated.
 
@@ -82,7 +82,7 @@ The previous example demonstrates a rudimentary approach to securing passwords t
 
 2) **Collision attacks**
 
-   Some hashing algorithms have been shown to generate the same hash for two different passwords, allowing an attacker gain access by finding a string with a hash that matches that of an existing user's password.
+   Some hashing algorithms have been shown to generate the same hash for two different passwords, allowing an attacker to gain access by finding a string with a hash that matches that of an existing user's password.
 
    Older hashing algorithms such as MD5 and SHA-1 have been demonstrated to be have this vulnerability and are now considered insecure for use as password security. Modern hashing algorithms like SHA-256 are much more resistant to collision attacks, though no hashing algorithm can ever be entirely immune.
 
@@ -143,13 +143,13 @@ First let's demonstrate dictionary attack on a compromised database. In a dictio
 
 If the attacker knows the hashing algorithm, they input a guessable password, along with one of the database's salts, and see if the resulting hash matches the hash in the database created from the salt.
 
-The full attack involves attempting every guessable password with every database salt.
+The full attack involves attempting every guessable password with every database salt. For each password, the attacker hashes it with every salt in the database, checking for matches in the list of stored hashes.
 
 Some dictionary attacks attempt millions of common passwords. So if we consider the scenario where the attacker has one million guessable passwords, and a compromised database of 10000 hashes and salts, the attacker would run the hashing algorithm 10 billion times in an attempt to generate a hash that matched one in the database. If they found a match, they'd have found the genuine password that corresponded to that hash.
 
 10 billion hash creations is obviously a lot, but the feasibility of such an attack depends on the execution time of the particular hash algorithm. Strong CHFs are designed to be computationally resource intensive, making them sufficiently slow, which helps mitigate against this kind of dictionary attack and other 'brute-force' methods. 
 
-Ideally they are slow enough to mitigate these attacks but not so slow that their legitmate uses are affected, like fast credential verification for authentication, so typically these algorithms are configured to generate a hash in 0.1-1 seconds. 
+Ideally they are slow enough to mitigate these attacks but not so slow that their legitmate uses are affected, such as fast credential verification for authentication. Typically these algorithms are configured to generate a hash in 0.1-1 seconds. 
 
 In our dictionary attack example, a 0.5 second hash time would take 158 years to test all one million guessable passwords.
 
@@ -164,9 +164,9 @@ This article highlighted how to securely hash user passwords stored on a server.
 1. Limiting number of login attempts within a set time period
    This becomes a vital protection in the event an attacker's range of potential guesses is very low, if for example they already know a portion of the user's password.
    
-2. Notifying users of login attempts, particularly emphasising those that failed, and are from new   devices or locations.
+2. Notifying users of login attempts, particularly emphasising those that failed and are from new devices or locations.
 
-3. Ensuring a minimum degree of password complexity. This should avoid enforcing overly complex passwords that are impossible to memorize, that are often stored unsecurely by the user, becoming vulnerable to exposure. However modern password manager applications are invaluable tools to both allow password complexity as well as minimizing exposure risk.
+3. Ensuring a minimum degree of password complexity. This should avoid enforcing overly complex passwords that are impossible to memorize, that are often stored unsecurely by the user, becoming vulnerable to exposure. However, modern password manager applications are invaluable tools that both allow password complexity and minimizing exposure risk.
 
 4. Enforcing HTTPS and maintaining certificate validity.
 
