@@ -149,19 +149,19 @@ namespace WebApplication6.Controllers
 With the simple login form:
 
 ```html
-<form method="post" asp-action="LoginSubmit">
-	<label>
-		Username:
-		<input type="text" name="username" required>
-	</label>
-	<br>
-	<label>
-		Password:
-		<input type="password" name="password" required>
-	</label>
-	<br>
-	<button type="submit">Login</button>
-</form>
+    <form method="post" asp-action="LoginSubmit">
+        <label>
+            Username:
+            <input type="text" name="username" required>
+        </label>
+        <br>
+        <label>
+            Password:
+            <input type="password" name="password" required>
+        </label>
+        <br>
+        <button type="submit">Login</button>
+    </form>
 ```
 
 And restricted homepage, only accessible if logged in, allowing the ability to logout:
