@@ -18,7 +18,7 @@ However it has numerous security vulnerabilities if misconfigured, so for produc
 
 1) A user submits their username and password through a traditional HTML form. Since these are plain, unencrypted values, the connection to the server should *always* be over HTTPS. The request should always be a POST request as the credentials will be stored in the HTTP body, instead of a GET request where the credentials will be appended to the request URL which is recorded in browser history, as well as potentally being forwarded to external sites in the Referer header.
 
-2) The server receives this request and validates the credentials. It then generates a unique, unguessable session ID using an [Cryptographically secure pseudorandom number generator](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator)(CSPRNG).
+2) The server receives this request and validates the credentials. It then generates a unique, unguessable session ID using an [Cryptographically secure pseudorandom number generator](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator) (CSPRNG).
 
 	A CSPRNG is used as it creates IDs that are unique, unpredictable and independent, ensuring a session ID cannot be guessed by an attacker.
 
