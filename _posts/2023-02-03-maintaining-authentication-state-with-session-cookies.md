@@ -148,36 +148,27 @@ namespace WebApplication6.Controllers
 
 With the simple login form:
 
-```html Login.cshtml
-    <form method="post" asp-action="LoginSubmit">
-        <label>
-            Username:
-            <input type="text" name="username" required>
-        </label>
-        <br>
-        <label>
-            Password:
-            <input type="password" name="password" required>
-        </label>
-        <br>
-        <button type="submit">Login</button>
-    </form>
+```razor
+<form method="post" asp-action="LoginSubmit">
+	<label>
+		Username:
+		<input type="text" name="username" required>
+	</label>
+	<br>
+	<label>
+		Password:
+		<input type="password" name="password" required>
+	</label>
+	<br/>
+	<button type="submit">Login</button>
+</form>
 ```
 
 And restricted homepage, only accessible if logged in, allowing the ability to logout:
 
-
-`Index.cshtml`
-
-```html 
+```razor 
 @model string
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Restricted Page</title>
-</head>
 <body>
     <h1>Restricted Home Page</h1>
     Welcome @Model, you are authorized.
@@ -187,7 +178,6 @@ And restricted homepage, only accessible if logged in, allowing the ability to l
         <button type="submit">Logout</button>
     </form>
 </body>
-</html>
 
 ```
 
