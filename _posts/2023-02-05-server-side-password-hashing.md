@@ -5,7 +5,7 @@ layout: default
 tags: authentication password hash SHA-1 SHA-256 salt PBKDF2 bcrypt scrypt rainbow
 is_series: true
 series_title: "Web Security"
-series_number: 2
+series_number: 3
 ---
 
 Real world applications that implement their own authentication process (e.g. user accounts with sign-in forms) must ensure user passwords are secured, and unreadable in the event the server is compromised.
