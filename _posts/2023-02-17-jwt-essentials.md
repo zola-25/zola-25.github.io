@@ -39,9 +39,9 @@ JWT tokens themselves are simple to construct, consisting of three parts:
 
 3. The signature, a unique ID generated using:
 	
-	i. The algorithm specified by `alg`
-	ii. A secret key known only by the communicating parties
-	iii. A string created from base64Url encoding the header and payload and concatenating them with a dot (.)
+	i. The algorithm specified by `alg`  
+	ii. A secret key known only by the communicating parties  
+	iii. A string created from base64Url encoding the header and payload and concatenating them with a dot (.)  
 	
 	For our example, and using the secret key 'secret', this looks like this:
 
