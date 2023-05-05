@@ -8,6 +8,10 @@ series_title: "Web Security"
 series_number: 5
 ---
 
+> **Note**
+>
+> [On Terminology](2023-03-15-OAuth-2-Overview.md#notes-on-terminology)
+
 
 1. A user has an existing account with a streaming service (e.g. Netflix), (the Service Provider).
 2. They have a smart TV with the service's app installed.
