@@ -20,7 +20,7 @@ In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenari
 
     Most similar to the OAuth 1.0 flow, used for server-based Client Applications, but easier to implement than OAuth 1.0.
 
-    [Implementing Authorization Code Flow](oauth2-auth-code-flow.md)
+    [Implementing Authorization Code Flow](2023-04-02-oauth2-auth-code-flow.md)
 
 
 2) **Implict Flow (also called Implict Grant Flow)**
