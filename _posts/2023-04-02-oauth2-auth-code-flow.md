@@ -12,7 +12,7 @@ This is most similar to the OAuth 1.0 flow. It is appropriate for server-based C
 
 > **Note**
 >
-> [On Terminology](2023-03-15-OAuth-2-Overview.md#notes-on-terminology)
+> [On Terminology](2023-03-15-oauth2-overview.md#notes-on-terminology)
 
 1) **App Registration**
 
