@@ -58,9 +58,7 @@ Authorization Code Flow with PKCE:
     https://auth.service.com/authorize?response_type=code&client_id=PkceAuthCodeFlow_DemoApp&scope=profile&state=OurOAuth2StateString&code_challenge=c46b62c38870e17ae9a33b0c901e6665241b54a594dcc981e2ac214897d061c1&code_challenge_method=S256&redirect_uri=https%3A%2F%2Fpkce.authcodeflow.demoapp.com%2Fcallback
     ```
 
-
-    As with traditional Authorization Code Flow, the *redirect_uri* is included to be checked with the one registered, as a security measure to prevent bogus requests redirecting the user to malicious sites or clones of the Client App, along with a [state value](#state), that we check for CSRF safety.
-
+    As with traditional Authorization Code Flow, the *redirect_uri* is included to be checked with the one registered, as a security measure to prevent bogus requests redirecting the user to malicious sites or clones of the Client App, along with a [state value](2023-04-02-oauth2-auth-code-flow.md#state), that we check for CSRF safety.
 
 3) **Temporary Authorization Code Granted** 
 
