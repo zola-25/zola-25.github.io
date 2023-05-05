@@ -1,5 +1,12 @@
-    
-## OpenID Connnect - OAuth 2.0 with Authentication
+---
+title: "OpenID Connnect - OAuth 2.0 with Authentication"
+permalink: /post/oauth2-authentication-with-openID-connect
+layout: default
+tags: OAuth-2.0 OpenID-Connect OIDC Authentication Access-Token
+is_series: true
+series_title: "Web Security"
+series_number: 5
+---
 
 When OAuth 2.0 was developed, it was focused on providing a secure and standardized framework for allowing users to authorize Client Apps without sharing credentials.
 
