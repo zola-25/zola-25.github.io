@@ -10,6 +10,10 @@ series_number: 5
 
 This is most similar to the OAuth 1.0 flow. It is appropriate for server-based Client Apps, that can securely store Access Tokens from an Authentication Server.
 
+> **Note**
+>
+> [On Terminology](2023-03-15-OAuth-2-Overview.md#notes-on-terminology)
+
 1) **App Registration**
 
     First, like in OAuth 1.0, the Client App developers register the app with the Service Provider.
