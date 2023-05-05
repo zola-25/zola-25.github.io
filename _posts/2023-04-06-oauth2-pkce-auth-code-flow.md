@@ -8,6 +8,10 @@ series_title: "Web Security"
 series_number: 5
 ---
 
+> **Note**
+>
+> [On Terminology](2023-03-15-OAuth-2-Overview.md#notes-on-terminology)
+
 Unlike implicit flow, Authorization Code Flow with PKCE includes the intermediate step of providing the client with an Authorization Code that is later used to exchange for Access Tokens. 
 
 Access Tokens are obtained with an AJAX request to a token-exchange endpoint on the Authorization Server, which has the sole purpose of certifying a request's Authorization Code and returning an Access Token. This means the Access Token is not exposed in browser history, or malicious browser extensions/scripts. 
