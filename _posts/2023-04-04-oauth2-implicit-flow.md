@@ -10,7 +10,7 @@ series_number: 5
 
 > **Note**
 >
-> [On Terminology](2023-03-15-OAuth-2-Overview.md#notes-on-terminology)
+> [On Terminology](2023-03-15-oauth2-overview.md#notes-on-terminology)
 
 Client-side applications are generally considered less secure at storing sensitive information like client secrets. 
 
