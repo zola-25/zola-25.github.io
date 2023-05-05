@@ -31,13 +31,13 @@ In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenari
 
     Implict Flow issues Access Tokens directly after user authorization. Has significant security vulnerabilities and its use is [no longer recommended](https://www.ietf.org/archive/id/draft-ietf-oauth-security-topics-17.html#name-implicit-grant) by the IETF.
     
-    [Implicit Flow Implementation](oauth2-implicit-flow.md)
+    [Implicit Flow Implementation](2023-04-04-oauth2-implicit-flow.md)
 
 3) **Authorization Code Flow with PKCE (Proof Key for Code Exchange)**
 
     The recommended alternative to Implicit Flow for applications unable to secure a client secret.
 
-    [Implementing Authorization Flow with PKCE](oauth2-pkce-code-flow.md)
+    [Implementing Authorization Flow with PKCE](2023-04-05-oauth2-pkce-auth-code-flow.md)
 
 4) **Resource Owner Password Credentials (ROPC)**
 
