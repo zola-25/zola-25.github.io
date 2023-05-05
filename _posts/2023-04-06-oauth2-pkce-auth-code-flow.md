@@ -8,18 +8,13 @@ series_title: "Web Security"
 series_number: 5
 ---
 
-### Authorization Code Flow with PKCE Implemtation
-
-#### Additional Authorization Code step
-
 Unlike implicit flow, Authorization Code Flow with PKCE includes the intermediate step of providing the client with an Authorization Code that is later used to exchange for Access Tokens. 
 
 Access Tokens are obtained with an AJAX request to a token-exchange endpoint on the Authorization Server, which has the sole purpose of certifying a request's Authorization Code and returning an Access Token. This means the Access Token is not exposed in browser history, or malicious browser extensions/scripts. 
 
 Contrast this with Implicit Flow where the Access Token is returned in a full page redirection URL, visible to the user and stored in browser history.
 
-The PKCE token exchange mechanism can also return refresh tokens giving the same [user-experience benefits](#### Obtaining-fresh-Access-Tokens-with-a-Refresh-Token
-) as server-based Authorization Code Flow.
+The PKCE token exchange mechanism can also return refresh tokens giving the same [user-experience benefits](2023-04-02-oauth2-auth-code-flow.md#maintaining-client-app-authorization) as server-based Authorization Code Flow.
 
 #### Securing the Authorization Code-Access Token exchange 
 
@@ -28,8 +23,6 @@ In the traditional Authorization Code Flow for server-backed Client Apps, when e
 With SPAs, there is no way to either distribute or store an app-specific client secret securely, considering the multiple browser instaces running the application.
 
 Authorization Code Flow with PKCE uses a mechanism to certify that an Authorization Code-Access Token request belongs to the same user and Client App instance that initiated the authorization process.
-
-
 
 Authorization Code Flow with PKCE:
 
