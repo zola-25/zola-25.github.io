@@ -37,7 +37,7 @@ In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenari
 
     The recommended alternative to Implicit Flow for applications unable to secure a client secret.
 
-    [Implementing Authorization Flow with PKCE](2023-04-05-oauth2-pkce-auth-code-flow.md)
+    [Implementing Authorization Flow with PKCE](2023-04-06-oauth2-pkce-auth-code-flow.md)
 
 4) **Resource Owner Password Credentials (ROPC)**
 
@@ -47,6 +47,26 @@ In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenari
 
     However an example use case for ROPC could be when a Client Application is highly trusted, and interacts with the Authorization Server within a closed network, such as a secure company intranet. 
 
-4) **Client Credentials Flow**
+5) **Client Credentials Flow**
 
     This is generally used for server-to-server communication with no user resource access required. 
+
+    The Client Application authenticates itself with the Authorization Server, and receives an Access Token for the Service Provider. 
+
+    The Client Application should be server-based to store their credentials securely.
+
+6) **Device Authorization Flow**
+
+    Device Authorization Flow is designed for authorizing Client Apps that run on a different device than one the user will use to authenticate with.
+
+    Typically this is implemented for authorizing Client Applications on devices such as TVs, where user credential input is physically difficult or slow.
+
+    Temporary user and device codes are generated to link the user's service account authorization with the device of the Client App requesting access 
+
+
+    [Implementing Device Authorization Flow](2023-04-04-oauth2-device-authorization-flow.md)
+
+
+### User Authentication through OAuth 2.0 with OIDC
+
+[User Authentication with OIDC](2023-04-03-oauth2-authentication-with-oidc.md)
