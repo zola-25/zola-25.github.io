@@ -10,7 +10,7 @@ series_number: 5
 
 > **Note**
 >
-> [On Terminology](2023-03-15-OAuth-2-Overview.md#notes-on-terminology)
+> [On Terminology](2023-03-15-oauth2-overview.md#notes-on-terminology)
 
 Device Authorization Flow is designed for authorizing Client Apps that run on a different device than one the user will use to authenticate with - typically this is used for authorizing streaming apps on Smart TVs to access a user's existing account, and grant them access to use it to stream data through the streaming app on the TV (the Client App).
 
