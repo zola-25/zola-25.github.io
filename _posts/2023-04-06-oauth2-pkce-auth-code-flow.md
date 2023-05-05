@@ -106,6 +106,6 @@ Authorization Code Flow with PKCE:
     Authorization: Bearer Acc3ssT0ken
     ```
 
-    If supported by the OAuth 2.0 implementation, the same [Refresh Token mechanism](#obtaining-fresh-access-tokens-with-a-refresh-token) outlined for regular Authorization Code Flow can be used to gain new Access Tokens when they near expiry. 
+    If supported by the OAuth 2.0 implementation, the same [Refresh Token mechanism](2023-04-02-oauth2-auth-code-flow.md#obtaining-fresh-access-tokens-with-a-refresh-token) outlined for regular Authorization Code Flow can be used to gain new Access Tokens when they near expiry. 
     
 
