@@ -10,9 +10,11 @@ series_number: 5
 
 OAuth 2.0 both improves and expands upon OAuth 1.0, with simpler authentication processes, and a modular approach that allows for additional use-cases besides server-based Client App authorization.
 
-[Notes on Terminology](#notes-on-terminology)
-
 In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenarios. We'll give a brief overview of each one before delving into the implementation details of some of the more notable ones - such as those that are widely adopted (Authorization Code Flow), those with notable security vulnerabilities or protections (Implicit Flow vs PKCE), and those with interesting use cases (Device Authorization Flow).
+
+> **Note**
+>
+> [On Terminology](#notes-on-terminology)
 
 ### Overview of OAuth 2.0 Flows
 
@@ -72,3 +74,21 @@ In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenari
 ### User Authentication through OAuth 2.0 with OIDC
 
 [User Authentication with OIDC](2023-04-03-oauth2-authentication-with-oidc.md)
+
+******
+
+#### Notes on Terminology
+
+*Service Providers* are *First-party* apps - those that provide the user resources and functionality we wish to integrate with.
+
+*Client Applications* are the *Third-party* apps to be integrated - usually smaller and requiring user-specific resources the service provider has access to.
+
+*Authorization Servers* allow the Client App to authenticate and allows the user to grant the application permissions to resources on the Service Provider.
+
+*Identity Providers* allow the user to authenticate, verifying their identity to any other service that might require it. This could be both the Client App and the Service Provider.
+
+In some cases the functions of the Identity Provider, Authorization Server and Service Provider are all provided by the same service or organisation - for example Facebook provides user authentication, as well as allowing users to grant authorization to third-party applications to access user data, while being the Service Provider at the same time.
+
+However there are plenty of Service Providers that use separate Identity Providers - it's common for an application to allow authentication with multiple providers such as Google, Microsoft, Apple and others. Instances of applications using separate Identity Providers and Authorization Servers are rare. Although they serve different functions, for the purpose of Client App integration they are usually configured together. 
+
+For convenience, examples in these articles will assume the Identity Provider and the Authorization Server are the same service, and use the term Authorization Server even when the service is only providing user authentication.
