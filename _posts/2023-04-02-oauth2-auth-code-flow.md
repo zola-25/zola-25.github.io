@@ -1,4 +1,12 @@
-
+---
+title: "OAuth 2.0 Authorization Code Flow"
+permalink: /post/oauth2-auth-code-flow
+layout: default
+tags: OAuth-2.0 Authorization Authentication Authorization-Code-Flow Access-Token Third-Party-Access 
+is_series: true
+series_title: "Web Security"
+series_number: 5
+---
 
 
 ### Authorization Code Flow Implemention 
