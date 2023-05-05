@@ -10,7 +10,7 @@ series_number: 5
 
 > **Note**
 >
-> [On Terminology](2023-03-15-OAuth-2-Overview.md#notes-on-terminology)
+> [On Terminology](2023-03-15-oauth2-overview.md#notes-on-terminology)
 
 Unlike implicit flow, Authorization Code Flow with PKCE includes the intermediate step of providing the client with an Authorization Code that is later used to exchange for Access Tokens. 
 
