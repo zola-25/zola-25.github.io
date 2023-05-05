@@ -36,6 +36,8 @@ In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenari
 3) **Authorization Code Flow with PKCE (Proof Key for Code Exchange)**
 
     The recommended alternative to Implicit Flow for applications unable to secure a client secret.
+    
+    This flow is similar to the standard OAuth 2.0 [Authorization Code Flow](2023-04-02-oauth2-auth-code-flow.md). It has fewer vulnerabilities than Implicit Flow, with PKCE limiting the Access Token's visibility and risk of interception; and ensuring the Access Token can only be received by the instance of the Client App in use by the authenticated user.
 
     [Implementing Authorization Flow with PKCE](2023-04-06-oauth2-pkce-auth-code-flow.md)
 
