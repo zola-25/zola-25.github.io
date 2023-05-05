@@ -8,9 +8,6 @@ series_title: "Web Security"
 series_number: 5
 ---
 
-
-### Authorization Code Flow Implemention 
-
 This is most similar to the OAuth 1.0 flow. It is appropriate for server-based Client Apps, that can securely store Access Tokens from an Authentication Server.
 
 1) **App Registration**
