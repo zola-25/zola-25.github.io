@@ -1,5 +1,14 @@
+---
+title: "OAuth 2.0 Device Authorization Flow"
+permalink: /post/oauth2-device-authorization-flow
+layout: default
+tags: OAuth-2.0 Authorization Authentication Device-Authorization-Flow Smart-TVs Streaming Netflix Access-Token Third-Party-Access 
+is_series: true
+series_title: "Web Security"
+series_number: 5
+---
 
-###
+
 1. A user has an existing account with a streaming service (e.g. Netflix), (the Service Provider).
 2. They have a smart TV with the service's app installed.
 3. They wish to authorize this app to use their account (essentially just authenticating with the app).
