@@ -3,20 +3,23 @@ title: "Common Browser Security Concepts"
 permalink: /post/browser-security-fundamentals
 layout: default
 tags: Browser Web HTTP HTML CORS CSRF SOP XSS
+is_series: true
+series_title: "Web Security"
+series_number: 1
 ---
 
 #### Same Origin Policy (SOP)
 
 The Same Origin Policy is a browser security feature that prevents scripts running in one window accessing the data from another window (whether tabs, windows or iFrames), unless both windows have the same origin - being the the URL scheme, host and port.
 
-The SOP retricts malicious sites reading sensitive information displayed by a target site, as well as restricting read access to the target site's cookies which may be maintaining an authenticated user state with the server. It also restricts malicious sites making Ajax requests to another site's domain. 
+The SOP restricts malicious sites reading sensitive information displayed by a target site, as well as restricting read access to the target site's cookies which may be maintaining an authenticated user state with the server. It also restricts malicious sites making Ajax requests to another site's domain. 
 
-Restrictions on legitimate cross-origin Ajax requests can be aleviated with by the target site implementing Cross-origin resource sharing (CORS), described later.
+Restrictions on legitimate cross-origin Ajax requests can be alleviated by the target site implementing Cross-origin resource sharing (CORS), described later.
 
 
 #### Cross-site request forgery (CSRF)
 
-SOP only retricts malicious sites reading data from a sensitive site. It does not prevent a malicious site embedding a request to a target site into an element within its display, and tricking the user into making that request. 
+SOP only restricts malicious sites reading data from a sensitive site. It does not prevent a malicious site embedding a request to a target site into an element within its display, and tricking the user into making that request. 
 
 For example, a malicious site could display an image tag such as
 
@@ -115,6 +118,6 @@ This prevents malicious sites taking advantage of the CORS protocol to make requ
 
 XSS is the injection of malicious scripts into a genuine web page, that can be executed in every browser that views that page. 
 
-Sites that allow users to input their custom HTML markup, or display any custom content that is not sanitised for any malicious tags (e.g. <script> tags), can be vulnerable. 
+Sites that allow users to input their custom HTML markup, or display any custom content that is not sanitized for any malicious tags (e.g. `<script>` tags), can be vulnerable. 
 
-Other ways to mitigate include escaping all HTML special characters where user text input is not supposed to be rendered as HTML.
+Other ways to mitigate include escaping all HTML special characters, when user text input is not supposed to be rendered as HTML.
