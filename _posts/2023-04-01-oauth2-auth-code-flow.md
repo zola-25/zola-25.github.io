@@ -85,7 +85,7 @@ The POST request contains the parameters:
 
 **client_secret** - AuthCodeFlow_DemoApp_SECRET
 
-```HTTP
+```http
 POST /token HTTP/1.1
 Host: auth.service.com
 Content-Type: application/x-www-form-urlencoded
@@ -156,7 +156,7 @@ The POST request should include in the request body, as URL-encoded form data:
 
 **scope** - The requested scopes, or omitted if the new Access Token is to have the same access as the expiring one
 
-```HTTP
+```http
 POST https://auth.service.com/token
 Content-Type: application/x-www-form-urlencoded
 

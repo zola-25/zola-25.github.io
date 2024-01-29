@@ -73,19 +73,19 @@ By default the SOP restricts sites making Ajax requests to other domains. The re
 
 CORS-compliant browsers will make a request to the external domain with an Origin HTTP header set to the requesting site:
 
-```HTTP
+```http
 Origin: https://origin-site.com
 ```
 
 If CORS is permitted for origin-site.com, the external domain server will respond with the Access-Control-Allow-Origin header in its response:
 
-```HTTP
+```http
 Access-Control-Allow-Origin: https://origin-site.com
 ```
 
 Or, if requests from all domains are allowed, it will respond with:
 
-```HTTP
+```http
 Access-Control-Allow-Origin: *
 ```
 
@@ -97,7 +97,7 @@ Since some servers were developed before the CORS protocol became widely adopted
 
 Pre-flight requests are made by the browser to check the external domain server understands the CORS protocol and the requested method is permitted:
 
-```HTTP
+```http
 OPTIONS /
 Host: external-site.com
 Origin: https://origin-site.com
@@ -106,7 +106,7 @@ Access-Control-Request-Method: PUT
 
 If the external site understands CORS and the requested action, it can respond with the headers:
 
-```HTTP
+```http
 Access-Control-Allow-Origin: https://origin-site.com
 Access-Control-Allow-Methods: PUT
 ```

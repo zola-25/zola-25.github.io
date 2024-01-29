@@ -79,7 +79,7 @@ https://pkce.authcodeflow.demoapp.com/callback?code=TempAuth0rizati0nC0de&state=
 
 The Client App now makes an AJAX POST request to the Authorization Server's token exchange endpoint, with the Authorization Code and the *code_verifier* included in the URL-encoded form data:
 
-```HTTP
+```http
 POST /token HTTP/1.1
 Host: auth.service.com
 Content-Type: application/x-www-form-urlencoded
