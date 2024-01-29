@@ -3,6 +3,9 @@ title: "Cookies - A guide for developers"
 permalink: /post/cookies-guide
 layout: default
 tags: cookies cookie browsers web authentication HTTP privacy
+is_series: true
+series_title: "Web Security"
+series_number: 2
 ---
 
 The HTTP protocol is by definition stateless. Before cookies, websites had no way of remembering your current state and preferences - for example, if you were already logged in to the site, or whether you had made site-specific actions or state, such as the current items in an e-commerce site's shopping cart. 
@@ -15,7 +18,7 @@ When a user makes further requests to a site that has sent cookies, these cookie
 
 ## Example ASP.NET Core Implementation
 
-When a cookie is sent from the server to the client, it is sent in the HTTP reponse as a `set-cookie` header. Using a simple ASP.NET Core Program.cs to serve a static HTML page, we can define a simple cookie using middleware that will be sent to the client on each request:
+When a cookie is sent from the server to the client, it is sent in the HTTP response as a `set-cookie` header. Using a simple ASP.NET Core Program.cs to serve a static HTML page, we can define a simple cookie using middleware that will be sent to the client on each request:
 
 ```csharp
 
@@ -94,7 +97,7 @@ This is mitigated to vary degrees by setting the `SameSite` attribute on the coo
 
 1. `Strict`: The cookie can only be sent to the origin domain
 
-2. `Lax`: The cookie can only be sent to its origin site when navigating to the cookie's origin site from an external site. This is the default behaviour, if the `SameSite` attribute is not set.
+2. `Lax`: The cookie can only be sent to its origin site when navigating to the cookie's origin site from an external site. This is the default behavior, if the `SameSite` attribute is not set.
 
 3. `None`: The cookie is sent to any external site request from the origin page. This option requires the `Secure` attribute to be set, enforcing that cookie can only be transmitted to the external site through HTTPS. As mentioned above, the `Secure` attribute does not prevent a malicious script reading or modifying the cookie unless the `HttpOnly` attribute is also set.
 
@@ -138,9 +141,9 @@ The browser HTTP request made to the external (Third-party) site contains detail
 
 This data is then stored in a cookie and sent back to your browser for storage. These details can be used to create a cookie with a unique identifier that is subsequently sent to other sites you visit.
 
-Other sites accessing these cookies can then update the information stored in the cookie with information based on your further browsing activity, such as recording the new website you visit, pages viewed and any other behavioural data relating to that site.
+Other sites accessing these cookies can then update the information stored in the cookie with information based on your further browsing activity, such as recording the new website you visit, pages viewed and any other behavioral data relating to that site.
 
-Further browsing allows sites to build a profile of your browsing habits. This personal data can then be sold to data brokers, advertisers, marketing companies, political organisations and other entities that can benefit from personalized data. Data breaches can even result in this information being sold illicitly, such as through the dark web.
+Further browsing allows sites to build a profile of your browsing habits. This personal data can then be sold to data brokers, advertisers, marketing companies, political organizations and other entities that can benefit from personalized data. Data breaches can even result in this information being sold illicitly, such as through the dark web.
 
 ## Helpful Links
 

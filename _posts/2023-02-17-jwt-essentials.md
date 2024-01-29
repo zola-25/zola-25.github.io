@@ -5,7 +5,7 @@ layout: default
 tags: JWT JWE authentication authorization security session claims JSON-Web-Token 
 is_series: true
 series_title: "Web Security"
-series_number: 4
+series_number: 6
 ---
 
 JWT tokens are used for communicating information between different applications and services, with properties that enable the receiver to certify the information in the JWT is authentic and has not be tampered with.
@@ -23,7 +23,7 @@ JWT tokens themselves are simple to construct, consisting of three parts:
 	}
 	```
 
-2. The payload, a JSON object containing the relevant information being transfered. 
+2. The payload, a JSON object containing the relevant information being transferred. 
 
 	The JSON object can contain standardized fields such as `sub`, which usually means an identifier corresponding to the principal subject of the token, such as a user ID, and `exp`, which means the date and time after which the JWT is no longer valid. 
 
@@ -39,35 +39,70 @@ JWT tokens themselves are simple to construct, consisting of three parts:
 
 3. The signature, a unique ID generated using:
 	
-	i. The algorithm specified by `alg`  
-	ii. A secret key known only by the communicating parties  
-	iii. A string created from base64Url encoding the header and payload and concatenating them with a dot (.)  
+	i. A secret key known only by the communicating parties  
 	
-	For our example, and using the secret key 'secret', this looks like this:
+	ii. A string created from [base64Url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoding the header and payload and concatenating them with a dot (.)
+	
+	iii. Using the algorithm specified by `alg` to generate a *base64Url* signature   
+	
+	For our example, and using the secret key 'secret', a C# implementation looks like this:
 
-	Header in base64Url: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9`
+	```csharp
 
-	Payload in base64Url: `eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJKb2huIERvZSIsImV4cCI6MTcxMzM5NDgwMH0`
+	string jwtHeader = @"{
+		""alg"": ""HS256"",
+		""typ"": ""JWT""
+	}".JsonMinify();
 
-	Signature: 
+	string jwtPayload = @"{
+		""sub"": ""1234567890"",
+		""username"": ""John Doe"",
+		""exp"": 1713394800
+	}".JsonMinify();
+		
+	string jwtHeaderBase64 = Base64UrlEncoder.Encode(jwtHeader);
+	string jwtPayloadBase64 = Base64UrlEncoder.Encode(jwtPayload);
+
+	string sharedSecret = "secret";
+
+	string jwtHeaderPayload = $"{jwtHeaderBase64}.{jwtPayloadBase64}";
+
+	using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(sharedSecret));
+
+	byte[] jwtSignatureBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(jwtHeaderPayload));
+	string jwtSignature = Base64UrlEncoder.Encode(jwtSignatureBytes);
+
+	Console.WriteLine($"jwtHeaderPayload: {jwtHeaderPayload}");
+	Console.WriteLine($"jwtSignature: {jwtSignature}");
+
+
+	public static class JsonExtensions {
+
+    	public static string JsonMinify(this string json) 
+			=> JsonSerializer.Serialize(JsonSerializer.Deserialize<JsonDocument>(json));
+	}
 
 	```
-	HMACSHA256(
-		eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJKb2huIERvZSIsImV4cCI6MTcxMzM5NDgwMH0,
-		secret
-	) 
-	```
 
-	`= kl594WAxLmLh6vff2ytJ5hxjLBe4nmyt533MB2yOSsc`
-	
+	From which we get the output:
+
+	jwtHeaderPayload: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJKb2huIERvZSIsImV4cCI6MTcxMzM5NDgwMH0`
+
+	jwtSignature: `kl594WAxLmLh6vff2ytJ5hxjLBe4nmyt533MB2yOSsc`
+
+		
+	Our signed JWT is thus:
+
+	`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJKb2huIERvZSIsImV4cCI6MTcxMzM5NDgwMH0.kl594WAxLmLh6vff2ytJ5hxjLBe4nmyt533MB2yOSsc`
+
+	i.e. [Header in *base64Url*].[Payload in *base64Url*].[Signature]
+
+	We can verify this signed JWT using [jwt.io](https://jwt.io/#debugger-io):
+
+	<img width="920" alt="image" src="https://github.com/zola-25/zola-25.github.io/assets/29863888/00f7b0b1-9f58-4b4a-bc75-ae1bbe9a3ff3">
 	
 ***
 
-Our signed JWT is then:
-
-`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJKb2huIERvZSIsImV4cCI6MTcxMzM5NDgwMH0.kl594WAxLmLh6vff2ytJ5hxjLBe4nmyt533MB2yOSsc`
-
-i.e. [Header in base64Url].[Payload in base64Url].[Signature]
 
 #### JWT Advantages
 

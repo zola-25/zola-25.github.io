@@ -5,11 +5,10 @@ layout: default
 tags: OAuth-2.0 Authorization Authentication Authorization-Code-Flow PKCE Implicit-Flow Access-Token Third-Party-Access 
 is_series: true
 series_title: "Web Security"
-series_number: 5
+series_number: 11
 ---
 
 > **Note**
->
 > [On Terminology](2023-03-15-oauth2-overview.md#notes-on-terminology)
 
 Unlike implicit flow, Authorization Code Flow with PKCE includes the intermediate step of providing the client with an Authorization Code that is later used to exchange for Access Tokens. 
@@ -24,7 +23,7 @@ The PKCE token exchange mechanism can also return refresh tokens giving the same
 
 In the traditional Authorization Code Flow for server-backed Client Apps, when exchanging the Authorization Code for an Access Token, the client secret is included so that the Authorization Server knows the request originated from Client App's server and can be trusted.
 
-With SPAs, there is no way to either distribute or store an app-specific client secret securely, considering the multiple browser instaces running the application.
+With SPAs, there is no way to either distribute or store the client secret securely, considering the multiple browser instances running the application.
 
 Authorization Code Flow with PKCE uses a mechanism to certify that an Authorization Code-Access Token request belongs to the same user and Client App instance that initiated the authorization process.
 
@@ -68,9 +67,9 @@ Authorization Code Flow with PKCE:
 
     The user then authenticates and grants the Client App the requested *scope* permissions.
 
-    The Authorization Server then creates a temporary Authorization Code, and temporarily saves the *code_challenge* and the *code_challenge_method* with this Authorization Code. Later these will be used to verify that the token exchange request belongs to the same Client App, and for the same user, that inititated the process.
+    The Authorization Server then creates a temporary Authorization Code, and temporarily saves the *code_challenge* and the *code_challenge_method* with this Authorization Code. Later these will be used to verify that the token exchange request belongs to the same Client App, and for the same user, that initiated the process.
 
-    The Authorization Server then redirectes the browser back to the Client App with the temporary Authorization Code:
+    The Authorization Server then redirects the browser back to the Client App with the temporary Authorization Code:
 
     ```
     https://pkce.authcodeflow.demoapp.com/callback?code=TempAuth0rizati0nC0de&state=OurOAuth2StateString
@@ -88,7 +87,7 @@ Authorization Code Flow with PKCE:
     grant_type=authorization_code&code=TempAuth0rizati0nC0de&redirect_uri=https%3A%2F%2Fpkce.authcodeflow.demoapp.com%2Fcallback&client_id=PkceAuthCodeFlow_DemoApp&code_verifier=iQhYcRvP8zSxL6mA0tN_fE2DGZ1XjKUokbOeHsn7wYM4-lWpV
     ```
 
-    Since the authorization server knows the *code_challenge* and *code_challenge_method*, it will apply the *code_challenge_method* to the *code_verifier* to confirm it matches the original *code_challenge*, and can trust the request.
+    Since the Authorization Server knows the *code_challenge* and *code_challenge_method*, it will apply the *code_challenge_method* to the *code_verifier* to confirm it matches the original *code_challenge*, and can trust the request.
      
     It then returns a JSON response with the Access Token, along with a refresh_token if supported:
 
@@ -103,7 +102,7 @@ Authorization Code Flow with PKCE:
 
 5) **Accessing Protected Resources**
 
-    The Client App can now make requests for protected resources in the usual manner, except from the browser if there is no server backend as may be the case in with a SPA. The Access Token is added in the Authorization Header:
+    The Client App can now make requests for protected resources in the usual manner, except requests are made from the browser if there is no server backend, as may be the case with a SPA. The Access Token is added in the Authorization Header:
 
 
     ```

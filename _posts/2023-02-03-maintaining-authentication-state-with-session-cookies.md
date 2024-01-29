@@ -5,18 +5,18 @@ layout: default
 tags: authentication security HTTPS HSTS state session cookie sessionID set-cookie ASP.NET-Core HttpOnly SameSite Secure
 is_series: true
 series_title: "Web Security"
-series_number: 2
+series_number: 4
 ---
 
 This is a widely used, browser-based approach for allowing a user to maintain their authentication state, thus avoiding having them constantly re-authenticate when accessing protected resources.
 
 It's straightforward, and we'll demonstrate a simple implementation in ASP.NET Core, without using any external libraries. 
 
-However it has numerous security vulnerabilities if misconfigured, so for production-use it is nearly always implemented on the server using proven third-party libaries, such as those available for .NET and PHP.
+However it has numerous security vulnerabilities if misconfigured, so for production-use it is nearly always implemented on the server using proven third-party libraries, such as those available for .NET and PHP.
 
 ### Session Cookie Authentication Steps:
 
-1) A user submits their username and password through a traditional HTML form. Since these are plain, unencrypted values, the connection to the server should *always* be over HTTPS. The request should always be a POST request as the credentials will be stored in the HTTP body, instead of a GET request where the credentials will be appended to the request URL which is recorded in browser history, as well as potentally being forwarded to external sites in the Referer header.
+1) A user submits their username and password through a traditional HTML form. Since these are plain, unencrypted values, the connection to the server should *always* be over HTTPS. The request should always be a POST request as the credentials will be stored in the HTTP body, instead of a GET request where the credentials will be appended to the request URL which is recorded in browser history, as well as potentially being forwarded to external sites in the Referer header.
 
 2) The server receives this request and validates the credentials. It then generates a unique, unguessable session ID using an [Cryptographically secure pseudorandom number generator](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator) (CSPRNG).
 
@@ -49,7 +49,7 @@ The session ID cookie should only contain the randomly generated session ID, and
 
 ### Ensuring session ID invalidation
 
-Session IDs should expire and be removed from server storage after a set period of time. This helps prevent scenarios where an authenticated user leaves their device with the browser still open, allowing another - potentally malicous - user to use the device to access sensitive content.
+Session IDs should expire and be removed from server storage after a set period of time. This helps prevent scenarios where an authenticated user leaves their device with the browser still open, allowing another - potentially malicious - user to use the device to access sensitive content.
 
 Additionally, sites should provide authenticated users with a logout mechanism that acts to remove or invalidates the session ID on the server.
 
@@ -97,6 +97,7 @@ namespace WebApplication6.Controllers
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost("Login")]
         public IActionResult LoginSubmit([FromForm] Credentials credentials)
         {
@@ -123,7 +124,8 @@ namespace WebApplication6.Controllers
                 return Unauthorized("Invalid username or password. Please try again.");
             }
         }
-
+        
+        [ValidateAntiForgeryToken]
         [HttpPost("Logout")]
         public IActionResult Logout()
         {
@@ -149,7 +151,8 @@ namespace WebApplication6.Controllers
 With the simple login form:
 
 ```razor
-<form method="post" asp-action="LoginSubmit">
+
+<form method="post" asp-action="LoginSubmit" asp-controller="Home">
     <label>
         Username:
         <input type="text" name="username" required>
@@ -174,7 +177,7 @@ And restricted homepage, only accessible if logged in, allowing the ability to l
     Welcome @Model, you are authorized.
 
     <h2>Logout?</h2>
-    <form method="post" asp-action="Logout">
+    <form method="post" asp-action="Logout" asp-controller="Home">
         <button type="submit">Logout</button>
     </form>
 </body>

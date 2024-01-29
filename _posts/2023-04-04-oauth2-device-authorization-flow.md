@@ -5,12 +5,12 @@ layout: default
 tags: OAuth-2.0 Authorization Authentication Device-Authorization-Flow Smart-TVs Streaming Netflix Access-Token Third-Party-Access 
 is_series: true
 series_title: "Web Security"
-series_number: 5
+series_number: 12
 ---
 
 > **Note**
->
 > [On Terminology](2023-03-15-oauth2-overview.md#notes-on-terminology)
+
 
 Device Authorization Flow is designed for authorizing Client Apps that run on a different device than one the user will use to authenticate with - typically this is used for authorizing streaming apps on Smart TVs to access a user's existing account, and grant them access to use it to stream data through the streaming app on the TV (the Client App).
 
@@ -20,11 +20,11 @@ Device Authorization Flow is designed for authorizing Client Apps that run on a 
 
 - They have a smart TV with the service's app installed (the Client App).
 
-- They wish to authorize this app to use their account (essentially just authenticating with the app from the user's perspective, but described accurately as authorization).
+- They wish to authorize this Client App to use their account (essentially just authenticating with the app from the user's perspective, but described accurately as authorization).
 
 - They could authenticate manually through the app, but the user interface on the TV is difficult to use, so instead they authenticate on a user-friendlier device such as their mobile device. 
   
-  It's also often the case that they are already authenticated with the service's mobile app equivalent, or a different mobile app that is using the same identity provider as the service, in which case they just need to tap Yes a confirmation popup (for example, authorization requests are often sent through the YouTube App for related Google services). It is the Device Authorization Flow process that enables this functionality.
+  It's also often the case that they are already authenticated with the service's mobile app equivalent, or a different mobile app that is using the same Identity Provider as the service, in which case they just need to tap Yes a confirmation popup (for example, authorization requests are often sent through the YouTube App for related Google services). It is the Device Authorization Flow process that enables this functionality.
 
 
 #### Implementation
@@ -37,9 +37,9 @@ A simplified version of the Device Authorization Flow process works as follows:
 
     The Authorization Server:
 
-    1) Geneates a random *device_code* to identify streaming app device being authorized.
+    1) Generates a random *device_code* to identify streaming app device being authorized.
 
-    2) Geneates a random *user_code* identifying the authorization process being started.
+    2) Generates a random *user_code* identifying the authorization process being started.
 
     3) Stores these together on the server temporarily, as they will be needed for later verification when the user completes authorization.
 

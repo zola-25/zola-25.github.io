@@ -5,7 +5,7 @@ layout: default
 tags: authentication basic session HTTP HTTPS
 is_series: true
 series_title: "Web Security"
-series_number: 1
+series_number: 3
 ---
 
 Basic Access Authentication is probably the simplest authentication scheme to implement.

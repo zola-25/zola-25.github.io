@@ -5,7 +5,7 @@ layout: default
 tags: OAuth-2.0 Authorization Authentication Authorization-Code-Flow Access-Token Third-Party-Access 
 is_series: true
 series_title: "Web Security"
-series_number: 5
+series_number: 9
 ---
 
 This is most similar to the OAuth 1.0 flow. It is appropriate for server-based Client Apps, that can securely store Access Tokens from an Authentication Server.
@@ -18,9 +18,9 @@ This is most similar to the OAuth 1.0 flow. It is appropriate for server-based C
 
     First, like in OAuth 1.0, the Client App developers register the app with the Service Provider.
 
-    During registration the app is assigned a *client_id*, a unique identifer for the app, and a *client_secret*, used for authenticating the app when requesting Access Tokens and should be kept confidential.
+    During registration the Client App is assigned a *client_id*, its unique identifier, and a *client_secret*, used for authenticating the Client App when requesting Access Tokens and should be kept confidential.
     
-    In addition, during registration a *redirect_uri* must be provided, usedd to ensure the Authorization Server will send the user back to the genuine Client App after user authorization.
+    In addition, during registration a *redirect_uri* must be provided, used to ensure the Authorization Server will send the user back to the genuine Client App after user authorization.
 
     To full demonstrate the implementation, we'll define an example Client Application with the necessary registration variables set:
 
@@ -42,7 +42,7 @@ This is most similar to the OAuth 1.0 flow. It is appropriate for server-based C
     
     **response_type** - Has its value set to 'code', which indicates the app is initiating the Authorization Code Flow
     
-    **scope** - The list of permissions the Client App is asking the user to authorize. For this example we'll just set 'profile', as all ourexample Client App requires is to read the user's profile.
+    **scope** - The list of permissions the Client App is asking the user to authorize. For this example we'll just set 'profile', as all our example Client App requires is to read the user's profile.
     
     **redirect_uri** - `https://authcodeflow.demoapp.com/callback`, encoded when sent as a URL parameter 
     
@@ -58,7 +58,7 @@ This is most similar to the OAuth 1.0 flow. It is appropriate for server-based C
 
     However for the implementation examples, we will use this dummy state string that's easier to track, especially across multiple examples: 'OurOAuth2StateString'
     
-    Given these parameters, the URL our Client App directs the user to looks like: 
+    Given these parameters, our Client App directs the user to the Authorization Server with this URL: 
 
     ```
     https://auth.service.com/authorize?response_type=code&client_id=AuthCodeFlow_DemoApp&scope=profile&state=OurOAuth2StateString&redirect_uri=https%3A%2F%2Fauthcodeflow.demoapp.com%2Fcallback
@@ -114,7 +114,7 @@ This is most similar to the OAuth 1.0 flow. It is appropriate for server-based C
 
     **expires_in** - The number of seconds this Access Token is valid for, so here it's valid for 1 hour before it expires, at which point the Client App can no longer access the protected resources. 
 
-    *refresh_token* - The Refresh Token can be used to obtain a new Access Token when the issued one expires - they are covered in detail in the [following section](#maintaining-client-app-authorization). They are optional depending on the OAuth implementation an application use case - they may not be present in the JSON.
+    **refresh_token** - The Refresh Token can be used to obtain a new Access Token when the issued one expires - they are covered in detail in the [following section](#maintaining-client-app-authorization). They are optional depending on the OAuth implementation and application use case - they may not be present in the JSON.
 
     This JSON data is stored on the server and associated with the user.
 
@@ -134,7 +134,7 @@ If the Client App requires resource access on an ongoing basis to perform its fu
 
 Instead the Client App can stay authorized with the Service Provider over a longer period, either by:
 
-1) Being issued very-long lifetime Access Tokens. Long lifetime Access Tokens pose a greater risk of being exposed since they are sent with every request. Also, since not all OAuth 2.0 implementations support Access Token revokation, securing user resources against Client Apps using long lifetime Access Tokens can be difficult.
+1) Being issued very-long lifetime Access Tokens. Long lifetime Access Tokens pose a greater risk of being exposed since they are sent with every request. Also, since not all OAuth 2.0 implementations support Access Token revocation, securing user resources when issuing long lifetime Access Tokens can be difficult.
 
 2) Use Refresh Tokens to gain fresh Access Tokens - if Refresh Tokens are supported by the OAuth 2.0 implementation
 
