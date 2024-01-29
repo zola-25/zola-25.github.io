@@ -147,7 +147,7 @@ public class HomeController : Controller
 
 With the simple login form:
 
-```HTML
+```html
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <form method="post" asp-action="LoginSubmit" asp-controller="Home">
@@ -167,7 +167,7 @@ With the simple login form:
 
 And restricted homepage, only accessible if logged in, allowing the ability to logout:
 
-```HTML 
+```html 
 @model string
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
