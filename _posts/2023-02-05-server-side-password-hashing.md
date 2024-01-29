@@ -88,7 +88,7 @@ The previous example demonstrates a rudimentary approach to securing passwords t
 
 #### 2012 LinkedIn Data Breach
 
-A notable example of the vulnerabilities of simple hashing techniques is the [2012 LinkedIn data breach](https://en.wikipedia.org/wiki/2012_LinkedIn_hack). Passwords were stored unsalted using the compromised SHA-1 algorithm. The user database was leaked and a large proportion of passwords were cracked using rainbow tables and dictionary attacks.
+A notable example of the vulnerabilities of simple hashing techniques is the [2012 LinkedIn data breach](https://en.wikipedia.org/wiki/2012_LinkedIn_hack). Passwords were stored [unsalted](/post/server-side-password-hashing#salting) using the compromised SHA-1 algorithm. The user database was leaked and a large proportion of passwords were cracked using rainbow tables and dictionary attacks.
 
 ### Secure Cryptographic Hash Functions
 
@@ -102,7 +102,8 @@ Modern password hashing uses Secure Cryptographic Hash Functions. These Secure C
    
    Secure CHFs can allow the adjustment of the computational resources needed to derive a hash. This is designed to make the generation of vast amounts of password/hash combinations computationally impractical for an attacker, while ensuring hash generation speed for legitimate purposes is practical.
 
-3. **Salting** <a name="salting"></a>
+<a name="salting"></a>
+3. **Salting** 
    
    A salt is a random value added to the password before hashing, which is then stored, unencrypted, with the resulting hash. For later password verification, the hash is recreated by including the salt in the hash algorithm. 
    

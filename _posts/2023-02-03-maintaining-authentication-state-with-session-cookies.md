@@ -20,9 +20,9 @@ However it has numerous security vulnerabilities if misconfigured, so for produc
 
 2) The server receives this request and validates the credentials. It then generates a unique, unguessable session ID using an [Cryptographically secure pseudorandom number generator](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator) (CSPRNG).
 
-	A CSPRNG is used as it creates IDs that are unique, unpredictable and independent, ensuring a session ID cannot be guessed by an attacker.
+A CSPRNG is used as it creates IDs that are unique, unpredictable and independent, ensuring a session ID cannot be guessed by an attacker.
 
-	This ID is then associated with the user in the server's memory or database.
+This ID is then associated with the user in the server's memory or database.
 
 3) The server then sends back the ID in the set-cookie header. Any further navigation around the site sends the cookie back so the server knows the user is already authenticated and can track their actions across the site.
 
@@ -57,93 +57,90 @@ Additionally, sites should provide authenticated users with a logout mechanism t
 
 ```csharp
 
-namespace WebApplication6.Controllers
+public static class InMemoryDataStore
 {
-    public static class InMemoryDataStore
+    public static readonly Dictionary<string, string> UserSessions = new();
+    public static readonly Dictionary<string, string> UserCredentials = new() { { "user1", "password1" }, { "user2", "password2" } };
+}
+
+public class Credentials
+{
+    public string Username { get; set; }
+    public string Password { get; set; }
+}
+
+public class HomeController : Controller
+{
+    [HttpGet]
+    public IActionResult Index()
     {
-        public static readonly Dictionary<string, string> UserSessions = new();
-        public static readonly Dictionary<string, string> UserCredentials = new() { { "user1", "password1" }, { "user2", "password2" } };
-    }
+        string? sessionId = HttpContext.Request.Cookies["sessionId"];
+        bool isLoggedIn = sessionId != null && InMemoryDataStore.UserSessions.ContainsKey(sessionId);
 
-    public class Credentials
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
-
-    public class HomeController : Controller
-    {
-        [HttpGet]
-        public IActionResult Index()
+        if (isLoggedIn)
         {
-            string? sessionId = HttpContext.Request.Cookies["sessionId"];
-            bool isLoggedIn = sessionId != null && InMemoryDataStore.UserSessions.ContainsKey(sessionId);
+            var username = InMemoryDataStore.UserSessions[sessionId!];
 
-            if (isLoggedIn)
-            {
-                var username = InMemoryDataStore.UserSessions[sessionId!];
-
-                return View(model: username);
-            }
-            else
-            {
-                return RedirectToAction("Login");
-            }
+            return View(model: username);
         }
-
-        [HttpGet("Login")]
-        public IActionResult Login()
+        else
         {
-            return View();
-        }
-
-        [ValidateAntiForgeryToken]
-        [HttpPost("Login")]
-        public IActionResult LoginSubmit([FromForm] Credentials credentials)
-        {
-            string username = credentials.Username;
-            string password = credentials.Password;
-
-            if (InMemoryDataStore.UserCredentials.ContainsKey(username) && InMemoryDataStore.UserCredentials[username] == password)
-            {
-                string sessionId = GenerateSessionId();
-                InMemoryDataStore.UserSessions.Add(sessionId, username);
-                
-                HttpContext.Response.Cookies.Append("sessionId", sessionId, new CookieOptions()
-                {
-                    Secure = true,
-                    HttpOnly = true,
-                    SameSite = SameSiteMode.Strict,
-                    Path = "/"
-                });
-
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                return Unauthorized("Invalid username or password. Please try again.");
-            }
-        }
-        
-        [ValidateAntiForgeryToken]
-        [HttpPost("Logout")]
-        public IActionResult Logout()
-        {
-            string? sessionId = HttpContext.Request.Cookies["sessionId"];
-            if (sessionId != null && InMemoryDataStore.UserSessions.ContainsKey(sessionId))
-            {
-                InMemoryDataStore.UserSessions.Remove(sessionId);
-                HttpContext.Response.Cookies.Delete("sessionId");
-            }
             return RedirectToAction("Login");
         }
+    }
 
+    [HttpGet("Login")]
+    public IActionResult Login()
+    {
+        return View();
+    }
 
-        string GenerateSessionId()
+    [ValidateAntiForgeryToken]
+    [HttpPost("Login")]
+    public IActionResult LoginSubmit([FromForm] Credentials credentials)
+    {
+        string username = credentials.Username;
+        string password = credentials.Password;
+
+        if (InMemoryDataStore.UserCredentials.ContainsKey(username) && InMemoryDataStore.UserCredentials[username] == password)
         {
-            byte[] randomBytes = RandomNumberGenerator.GetBytes(32);
-            return Convert.ToBase64String(randomBytes);
+            string sessionId = GenerateSessionId();
+            InMemoryDataStore.UserSessions.Add(sessionId, username);
+            
+            HttpContext.Response.Cookies.Append("sessionId", sessionId, new CookieOptions()
+            {
+                Secure = true,
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                Path = "/"
+            });
+
+            return RedirectToAction("Index");
         }
+        else
+        {
+            return Unauthorized("Invalid username or password. Please try again.");
+        }
+    }
+    
+    [ValidateAntiForgeryToken]
+    [HttpPost("Logout")]
+    public IActionResult Logout()
+    {
+        string? sessionId = HttpContext.Request.Cookies["sessionId"];
+        if (sessionId != null && InMemoryDataStore.UserSessions.ContainsKey(sessionId))
+        {
+            InMemoryDataStore.UserSessions.Remove(sessionId);
+            HttpContext.Response.Cookies.Delete("sessionId");
+        }
+        return RedirectToAction("Login");
+    }
+
+
+    string GenerateSessionId()
+    {
+        byte[] randomBytes = RandomNumberGenerator.GetBytes(32);
+        return Convert.ToBase64String(randomBytes);
     }
 }
 ```
@@ -151,6 +148,7 @@ namespace WebApplication6.Controllers
 With the simple login form:
 
 ```razor
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <form method="post" asp-action="LoginSubmit" asp-controller="Home">
     <label>
@@ -171,6 +169,7 @@ And restricted homepage, only accessible if logged in, allowing the ability to l
 
 ```razor 
 @model string
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <body>
     <h1>Restricted Home Page</h1>
