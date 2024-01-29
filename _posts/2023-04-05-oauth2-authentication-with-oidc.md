@@ -9,7 +9,7 @@ series_number: 13
 ---
 
 > **Note**
-> [On Terminology](2023-03-15-oauth2-overview.md#notes-on-terminology)
+> [On Terminology](/_posts/2023-03-15-oauth2-overview#notes-on-terminology)
 
 When OAuth 2.0 was developed, it was focused on providing a secure and standardized framework for allowing users to authorize Client Apps without sharing credentials.
 

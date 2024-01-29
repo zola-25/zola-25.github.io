@@ -88,7 +88,7 @@ The previous example demonstrates a rudimentary approach to securing passwords t
 
 #### 2012 LinkedIn Data Breach
 
-A notable example of the vulnerabilities of simple hashing techniques is the [2012 LinkedIn data breach](https://en.wikipedia.org/wiki/2012_LinkedIn_hack). Passwords were stored [unsalted](#salting) using the compromised SHA-1 algorithm. The user database was leaked and a large proportion of passwords were cracked using rainbow tables and dictionary attacks.
+A notable example of the vulnerabilities of simple hashing techniques is the [2012 LinkedIn data breach](https://en.wikipedia.org/wiki/2012_LinkedIn_hack). Passwords were stored unsalted using the compromised SHA-1 algorithm. The user database was leaked and a large proportion of passwords were cracked using rainbow tables and dictionary attacks.
 
 ### Secure Cryptographic Hash Functions
 
