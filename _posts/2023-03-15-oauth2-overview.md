@@ -13,7 +13,7 @@ OAuth 2.0 both improves and expands upon OAuth 1.0, with simpler authentication 
 In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenarios. We'll give a brief overview of each one before delving into the implementation details of some of the more notable ones - such as those that are widely adopted (Authorization Code Flow), those with notable security vulnerabilities or protections (Implicit Flow vs PKCE), and those with interesting use cases (Device Authorization Flow).
 
 > **Note**
-> [On Terminology](2023-03-15-oauth2-overview.md#notes-on-terminology)
+> [On Terminology]({% link _posts/2023-03-15-oauth2-overview.md#notes-on-terminology %})
 
 ### Overview of OAuth 2.0 Flows
 

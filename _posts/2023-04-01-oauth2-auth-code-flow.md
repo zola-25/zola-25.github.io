@@ -11,7 +11,7 @@ series_number: 9
 This is most similar to the OAuth 1.0 flow. It is appropriate for server-based Client Apps, that can securely store Access Tokens from an Authentication Server.
 
 > **Note**
-> [On Terminology](2023-03-15-oauth2-overview.md#notes-on-terminology)
+> [On Terminology]({% link _posts/2023-03-15-oauth2-overview.md#notes-on-terminology %})
 
 1) **App Registration**
 
