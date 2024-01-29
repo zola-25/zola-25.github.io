@@ -9,7 +9,7 @@ series_number: 11
 ---
 
 > **Note**
-> [On Terminology](2023-03-15-oauth2-overview.md#notes-on-terminology)
+> [On Terminology](/post/oauth2-overview#notes-on-terminology)
 
 Unlike implicit flow, Authorization Code Flow with PKCE includes the intermediate step of providing the client with an Authorization Code that is later used to exchange for Access Tokens. 
 
@@ -17,7 +17,7 @@ Access Tokens are obtained with an AJAX request to a token-exchange endpoint on 
 
 Contrast this with Implicit Flow where the Access Token is returned in a full page redirection URL, visible to the user and stored in browser history.
 
-The PKCE token exchange mechanism can also return refresh tokens giving the same [user-experience benefits](2023-04-01-oauth2-auth-code-flow.md#maintaining-client-app-authorization) as server-based Authorization Code Flow.
+The PKCE token exchange mechanism can also return refresh tokens giving the same [user-experience benefits](/post/oauth2-auth-code-flow#maintaining-client-app-authorization) as server-based Authorization Code Flow.
 
 #### Securing the Authorization Code-Access Token exchange 
 
@@ -61,7 +61,7 @@ Authorization Code Flow with PKCE:
     https://auth.service.com/authorize?response_type=code&client_id=PkceAuthCodeFlow_DemoApp&scope=profile&state=OurOAuth2StateString&code_challenge=c46b62c38870e17ae9a33b0c901e6665241b54a594dcc981e2ac214897d061c1&code_challenge_method=S256&redirect_uri=https%3A%2F%2Fpkce.authcodeflow.demoapp.com%2Fcallback
     ```
 
-    As with traditional Authorization Code Flow, the *redirect_uri* is included to be checked with the one registered, as a security measure to prevent bogus requests redirecting the user to malicious sites or clones of the Client App, along with a [state value](2023-04-01-oauth2-auth-code-flow.md), that we check for CSRF safety.
+    As with traditional Authorization Code Flow, the *redirect_uri* is included to be checked with the one registered, as a security measure to prevent bogus requests redirecting the user to malicious sites or clones of the Client App, along with a [state value](post/oauth2-auth-code-flow), that we check for CSRF safety.
 
 3) **Temporary Authorization Code Granted** 
 
@@ -109,6 +109,6 @@ Authorization Code Flow with PKCE:
     Authorization: Bearer Acc3ssT0ken
     ```
 
-    If supported by the OAuth 2.0 implementation, the same [Refresh Token mechanism](2023-04-01-oauth2-auth-code-flow.md#obtaining-fresh-access-tokens-with-a-refresh-token) outlined for regular Authorization Code Flow can be used to gain new Access Tokens when they near expiry. 
+    If supported by the OAuth 2.0 implementation, the same [Refresh Token mechanism](/post/oauth2-auth-code-flow#obtaining-fresh-access-tokens-with-a-refresh-token) outlined for regular Authorization Code Flow can be used to gain new Access Tokens when they near expiry. 
     
 
