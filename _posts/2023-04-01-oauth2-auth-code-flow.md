@@ -84,7 +84,8 @@ The POST request contains the parameters:
 **grant-type** - "authorization_code" to tell the Authorization Server this is the Authorization code flow
 
 **client_secret** - AuthCodeFlow_DemoApp_SECRET
-```
+
+```HTTP
 POST /token HTTP/1.1
 Host: auth.service.com
 Content-Type: application/x-www-form-urlencoded
@@ -155,7 +156,7 @@ The POST request should include in the request body, as URL-encoded form data:
 
 **scope** - The requested scopes, or omitted if the new Access Token is to have the same access as the expiring one
 
-```
+```HTTP
 POST https://auth.service.com/token
 Content-Type: application/x-www-form-urlencoded
 

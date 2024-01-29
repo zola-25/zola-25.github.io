@@ -61,7 +61,7 @@ The user's browser is then redirected to the Authorization Server, with the *cod
 https://auth.service.com/authorize?response_type=code&client_id=PkceAuthCodeFlow_DemoApp&scope=profile&state=OurOAuth2StateString&code_challenge=c46b62c38870e17ae9a33b0c901e6665241b54a594dcc981e2ac214897d061c1&code_challenge_method=S256&redirect_uri=https%3A%2F%2Fpkce.authcodeflow.demoapp.com%2Fcallback
 ```
 
-As with traditional Authorization Code Flow, the *redirect_uri* is included to be checked with the one registered, as a security measure to prevent bogus requests redirecting the user to malicious sites or clones of the Client App, along with a [state value](post/oauth2-auth-code-flow), that we check for CSRF safety.
+As with traditional Authorization Code Flow, the *redirect_uri* is included to be checked with the one registered, as a security measure to prevent bogus requests redirecting the user to malicious sites or clones of the Client App, along with a [state value](/post/oauth2-auth-code-flow#state), that we check for CSRF safety.
 
 3) **Temporary Authorization Code Granted** 
 
@@ -79,7 +79,7 @@ https://pkce.authcodeflow.demoapp.com/callback?code=TempAuth0rizati0nC0de&state=
 
 The Client App now makes an AJAX POST request to the Authorization Server's token exchange endpoint, with the Authorization Code and the *code_verifier* included in the URL-encoded form data:
 
-```
+```HTTP
 POST /token HTTP/1.1
 Host: auth.service.com
 Content-Type: application/x-www-form-urlencoded
