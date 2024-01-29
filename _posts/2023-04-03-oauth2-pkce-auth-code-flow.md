@@ -17,7 +17,7 @@ Access Tokens are obtained with an AJAX request to a token-exchange endpoint on 
 
 Contrast this with Implicit Flow where the Access Token is returned in a full page redirection URL, visible to the user and stored in browser history.
 
-The PKCE token exchange mechanism can also return refresh tokens giving the same [user-experience benefits](2023-04-02-oauth2-auth-code-flow.md#maintaining-client-app-authorization) as server-based Authorization Code Flow.
+The PKCE token exchange mechanism can also return refresh tokens giving the same [user-experience benefits](2023-04-01-oauth2-auth-code-flow.md#maintaining-client-app-authorization) as server-based Authorization Code Flow.
 
 #### Securing the Authorization Code-Access Token exchange 
 
@@ -109,6 +109,6 @@ Authorization Code Flow with PKCE:
     Authorization: Bearer Acc3ssT0ken
     ```
 
-    If supported by the OAuth 2.0 implementation, the same [Refresh Token mechanism](2023-04-02-oauth2-auth-code-flow.md#obtaining-fresh-access-tokens-with-a-refresh-token) outlined for regular Authorization Code Flow can be used to gain new Access Tokens when they near expiry. 
+    If supported by the OAuth 2.0 implementation, the same [Refresh Token mechanism](2023-04-01-oauth2-auth-code-flow.md#obtaining-fresh-access-tokens-with-a-refresh-token) outlined for regular Authorization Code Flow can be used to gain new Access Tokens when they near expiry. 
     
 
