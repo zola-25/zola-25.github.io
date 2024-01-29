@@ -13,7 +13,7 @@ OAuth 2.0 both improves and expands upon OAuth 1.0, with simpler authentication 
 In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenarios. We'll give a brief overview of each one before delving into the implementation details of some of the more notable ones - such as those that are widely adopted (Authorization Code Flow), those with notable security vulnerabilities or protections (Implicit Flow vs PKCE), and those with interesting use cases (Device Authorization Flow).
 
 > **Note**
-> [On Terminology](/_posts/2023-03-15-oauth2-overview#notes-on-terminology)
+> [On Terminology](2023-03-15-oauth2-overview.md#notes-on-terminology)
 
 ### Overview of OAuth 2.0 Flows
 
@@ -21,7 +21,7 @@ In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenari
 
     Most similar to the OAuth 1.0 flow, used for server-based Client Applications, but easier to implement than OAuth 1.0.
 
-    [Implementing Authorization Code Flow](/_posts/2023-04-01-oauth2-auth-code-flow)
+    [Implementing Authorization Code Flow](2023-04-01-oauth2-auth-code-flow.md)
 
 
 2) **Implicit Flow (also called Implicit Grant Flow)**
@@ -32,15 +32,15 @@ In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenari
 
     Implicit Flow issues Access Tokens directly after user authorization. Has significant security vulnerabilities and its use is [no longer recommended](https://www.ietf.org/archive/id/draft-ietf-oauth-security-topics-17.html#name-implicit-grant) by the IETF.
     
-    [Implicit Flow Implementation](/_posts/2023-04-02-oauth2-implicit-flow)
+    [Implicit Flow Implementation](2023-04-02-oauth2-implicit-flow.md)
 
 3) **Authorization Code Flow with PKCE (Proof Key for Code Exchange)**
 
     The recommended alternative to Implicit Flow for applications unable to secure a client secret.
     
-    This flow is similar to the standard OAuth 2.0 [Authorization Code Flow](/_posts/2023-04-01-oauth2-auth-code-flow). It has fewer vulnerabilities than Implicit Flow, with PKCE limiting the Access Token's visibility and risk of interception; and ensuring the Access Token can only be received by the instance of the Client App in use by the authenticated user.
+    This flow is similar to the standard OAuth 2.0 [Authorization Code Flow](2023-04-01-oauth2-auth-code-flow.md). It has fewer vulnerabilities than Implicit Flow, with PKCE limiting the Access Token's visibility and risk of interception; and ensuring the Access Token can only be received by the instance of the Client App in use by the authenticated user.
 
-    [Implementing Authorization Flow with PKCE](/_posts/2023-04-03-oauth2-pkce-auth-code-flow)
+    [Implementing Authorization Flow with PKCE](2023-04-03-oauth2-pkce-auth-code-flow.md)
 
 4) **Resource Owner Password Credentials (ROPC)**
 
@@ -67,14 +67,14 @@ In fact, OAuth 2.0 offers several *flows*, are appropriate for different scenari
     Temporary user and device codes are generated to link the user's service account authorization with the device of the Client App requesting access 
 
 
-    [Implementing Device Authorization Flow](/_posts/2023-04-04-oauth2-device-authorization-flow)
+    [Implementing Device Authorization Flow](2023-04-04-oauth2-device-authorization-flow.md)
 
 ******
 ### User Authentication through OAuth 2.0 with OIDC
 
 OAuth was designed for application authorization, rather than user authentication. OpenID Connect (OIDC) is a subsequent extension of OAuth 2.0 that standardizes user authentication in addition to application authorization.
 
-[User Authentication with OIDC](/_posts/2023-04-05-oauth2-authentication-with-oidc)
+[User Authentication with OIDC](2023-04-05-oauth2-authentication-with-oidc.md)
 
 ******
 

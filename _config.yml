@@ -3,3 +3,6 @@ title: Solores Software
 description: A software and data engineering blog
 
 markdown: kramdown
+
+plugins:
+  - jekyll-relative-links

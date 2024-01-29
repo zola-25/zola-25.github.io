@@ -104,13 +104,13 @@ Pre-flight requests are made by the browser to check the external domain server 
   Access-Control-Request-Method: PUT
 ```
 
-If the external site undersands CORS and the requested action, it can respond with the headers:
+If the external site understands CORS and the requested action, it can respond with the headers:
 
 ```
   Access-Control-Allow-Origin: https://origin-site.com
   Access-Control-Allow-Methods: PUT
 ```
-If the external site does not undersand the CORS protocol, it will return an error, and the browser will not make the request.
+If the external site does not understand the CORS protocol, it will return an error, and the browser will not make the request.
 
 This prevents malicious sites taking advantage of the CORS protocol to make requests to sites that assume, due to the SOP, that all requests made are valid.
 
