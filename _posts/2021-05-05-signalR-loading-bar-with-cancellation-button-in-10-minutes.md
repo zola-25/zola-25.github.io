@@ -119,7 +119,7 @@ public async Task<IActionResult> Load(LoadViewModel loadViewModel, CancellationT
 
 In our /Views/Home/Index.cshtml, we define a few form controls, and a [bootstrap progress bar](https://getbootstrap.com/docs/4.0/components/progress/), that will demo the real time updates by pressing a button that makes an ajax call to the `Load(LoadViewModel loadViewModel, CancellationToken cancellationToken)` action method.
 
-```cshtml
+```html
 
 @model LoadViewModel
 
