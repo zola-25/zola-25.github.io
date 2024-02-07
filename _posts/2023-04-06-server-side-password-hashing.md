@@ -5,7 +5,7 @@ layout: default
 tags: authentication password hash SHA-1 SHA-256 salt PBKDF2 bcrypt scrypt rainbow
 is_series: true
 series_title: "Web Security"
-series_number: 5
+series_number: 13
 ---
 
 Real world applications that implement their own authentication process (e.g. user accounts with sign-in forms) must ensure user passwords are secured, and unreadable in the event the server is compromised.
@@ -73,18 +73,13 @@ It's important to note that this doesn't imply randomness in the CHF - the algor
 
 ### Simple Hashing Vulnerabilities
 
-The previous example demonstrates a rudimentary approach to securing passwords through hashing. When hashing was introduced as a security measure, over time vulnerabilities in the process became evident:
+The previous example demonstrates a rudimentary approach to securing passwords through hashing. When hashing was introduced as a security measure, over time vulnerabilities in the process became evident. If an attacker gains access to the to the database, obtaining the password from a hash can be possible, especially if the CHF used is known to the attacker. 
 
-1) **Pre-computing hashes**
+An attacker could simply hash random string combinations and see if the resulting hash matched any stored in the database. The larger the database, the more likely a match will be found. This is the 'brute force' approach, relying on simply processing power, and hence time. 
 
-   Because each password always generates the same hash, they are vulnerable to exploits where an attacker attacker pre-computes and stores hash/password combinations. The number of possible password/hash combinations makes it unrealistic to generate all conceivable combinations, but optimizations that trade increased password lookup time for storage size can be used instead to make such attacks feasible, such as ([rainbow tables](https://en.wikipedia.org/wiki/Rainbow_table#Precomputed_hash_chains)).
+Instead, an attacker could do the hash processing first, by pre-computing password/hash combinations and storing them, before performing the lookup - but simply storing the hash for every possible string would require an impossible amount of storage. A more realistic approach would be pre-computing hashes for a set of likely passwords. This is a pre-computed 'dictionary attack'. Many pre-generated hash/password databases for typical CHFs exist, for vast numbers of word and character combinations. These are often made using algorithms to generate human-memorable passwords, including typical letter-digit substitutions.
 
-
-2) **Collision attacks**
-
-   Some hashing algorithms have been shown to generate the same hash for two different passwords, allowing an attacker to gain access by finding a string with a hash that matches that of an existing user's password.
-
-   Older hashing algorithms such as MD5 and SHA-1 have been demonstrated to be have this vulnerability and are now considered insecure for use as password security. Modern hashing algorithms like SHA-256 are much more resistant to collision attacks, though no hashing algorithm can ever be entirely immune.
+The use of memorable passwords makes dictionary attacks more successful. Dictionary attacks aren't effective when random strings are used as passwords. Password managers can be helpful to generate and store large, random strings for passwords. Attackers are then forced back to hashing random string combinations. However there is an additional type of attack that uses pre-computation of vast numbers of possible string/hash combinations, but requires only a limited amount of storage space. These are '[Rainbow Tables](https://kestas.kuliukas.com/RainbowTables/)', constructed from reproducible chains of string hashing and hash-to-string 'reducing'. Depending on password size and possible characters, these chains can cover a large percentage of possible string/hash combinations, but their reproducibility means they can be omitted from the final table - drastically reducing its size. For an attacker, a Rainbow Table can then be used to deduce a password from a hash by reproducing some of these chains - so Rainbow Tables trade increased processing time for realistic storage size. 
 
 #### 2012 LinkedIn Data Breach
 
@@ -94,18 +89,15 @@ A notable example of the vulnerabilities of simple hashing techniques is the [20
 
 Modern password hashing uses Secure Cryptographic Hash Functions. These Secure CHFs have advantages over traditional CHFs:
 
-1. **Mitigating collision attack risk**
-   
-   The likelihood of hash collisions is so low, it becomes computationally infeasible to identify a collision using modern technology, making Secure CHFs very resistant to collision attacks.
-
-2. **Adaptability**
+1. **Adaptability**
    
    Secure CHFs can allow the adjustment of the computational resources needed to derive a hash. This is designed to make the generation of vast amounts of password/hash combinations computationally impractical for an attacker, while ensuring hash generation speed for legitimate purposes is practical.
 
-<a name="salting"></a>
-3. **Salting** 
+2. **Salting** 
    
-   A salt is a random value added to the password before hashing, which is then stored, unencrypted, with the resulting hash. For later password verification, the hash is recreated by including the salt in the hash algorithm. 
+   <a name="salting"></a>
+   
+   A salt is a random value generated for each password, and added to the password before hashing. The salt is then stored, unencrypted, with the resulting hash. For later password verification, the hash is recreated by including the salt in the hash algorithm. 
    
    Password salting ensures:
    
@@ -115,16 +107,12 @@ Modern password hashing uses Secure Cryptographic Hash Functions. These Secure C
       
 	2. Pre-computation attack protection  
       
-	   Pre-computation attacks and their variants become massively more resource and time-intensive, as an attacker must compute hashes for each possible salt-password combination, which is exponentially larger than for just the password plaintext.
+	   Pre-computation attacks become impractical, as an attacker must compute hashes for each possible salt-password combination, making the resulting tables exponentially larger compared to ones generated for just password plaintext. 
    
    A unique salt should be generated for every password, and whenever a password is changed. Salts are usually generated by a [Cryptographically secure pseudorandom number generator](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator) (CSPRNG), ensuring they are unpredictable, without any pattern or structure, and independent of each other. These properties ensure an attacker cannot guess anything about the salt that may aide them in an attack.
    
-   Salts are generated as a fixed-length string of bits, with the longer the salt, the more security provided:
+   Salts are generated as a fixed-length string of bits, with the longer the salt, the more security provided. 
 
-	1. By adding more uniqueness to the hash - reducing the chance of hash collisions
-	
-	2. Requiring attackers to generate more complex pre-computed tables
-   
 	However the longer the salt, the more storage space required, and a salt of 128 bits is generally considered secure for password hashing scenarios.
 
 ***
@@ -140,13 +128,13 @@ Secure CHFs often use algorithms such as SHA-256 as a component of their hash ge
 
 Even in the event the user database is compromised, there are additional properties of the hashing process that can prevent an attacker from cracking the hashed passwords. 
 
-First let's demonstrate dictionary attack on a compromised database. In a dictionary attack, the attacker has a large list of common, 'guessable' passwords. The database will include all password hashes along with each hash's unique salt that was used to generate it by the hashing function. 
+First let's demonstrate dictionary attack on a compromised database. In a dictionary attack, the attacker has a large list of common, 'guessable' passwords. The compromised database will include all password hashes along with each hash's unique salt that was used to generate it by the hashing function. The attacker's list of guessable passwords does not come with pre-computed hashes - the unique salt makes it necessary to compute a hash for each salt/password combination. 
 
 If the attacker knows the hashing algorithm, they input a guessable password, along with one of the database's salts, and see if the resulting hash matches the hash in the database created from the salt.
 
 The full attack involves attempting every guessable password with every database salt. For each password, the attacker hashes it with every salt in the database, checking for matches in the list of stored hashes.
 
-Some dictionary attacks attempt millions of common passwords. So if we consider the scenario where the attacker has one million guessable passwords, and a compromised database of 10000 hashes and salts, the attacker would run the hashing algorithm 10 billion times in an attempt to generate a hash that matched one in the database. If they found a match, they'd have found the genuine password that corresponded to that hash.
+Some dictionary attacks attempt millions of common passwords. So if we consider the scenario where the attacker has one million guessable passwords, and a compromised database of 10,000 hashes and salts, the attacker would run the hashing algorithm 10 billion times in an attempt to generate a hash that matched one in the database. If they found a match, they'd have found the genuine password that corresponded to that hash.
 
 10 billion hash creations is obviously a lot, but the feasibility of such an attack depends on the execution time of the particular hash algorithm. Strong CHFs are designed to be computationally resource intensive, making them sufficiently slow, which helps mitigate against this kind of dictionary attack and other 'brute-force' methods. 
 
@@ -162,8 +150,7 @@ Once an algorithm's computational parameters have been set, they cannot be chang
 
 This article highlighted how to securely hash user passwords stored on a server. It's worth noting additional precautions that mitigate password exposure:
 
-1. Limiting number of login attempts within a set time period
-   This becomes a vital protection in the event an attacker's range of potential guesses is very low, if for example they already know a portion of the user's password.
+1. Limiting number of login attempts within a set time period. This becomes a vital protection in the event an attacker's range of potential guesses is very low, if for example they already know a portion of the user's password.
    
 2. Notifying users of login attempts, particularly emphasizing those that failed and are from new devices or locations.
 

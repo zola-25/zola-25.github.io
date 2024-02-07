@@ -5,7 +5,7 @@ layout: default
 tags: OAuth-2.0 Authorization Authentication Authorization-Code-Flow PKCE Implicit-Flow Access-Token Third-Party-Access 
 is_series: true
 series_title: "Web Security"
-series_number: 11
+series_number: 10
 ---
 
 > **Note**

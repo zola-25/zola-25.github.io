@@ -5,7 +5,7 @@ layout: default
 tags: OAuth-2.0 OpenID-Connect OIDC Authentication Access-Token
 is_series: true
 series_title: "Web Security"
-series_number: 13
+series_number: 12
 ---
 
 > **Note**

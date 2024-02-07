@@ -5,7 +5,7 @@ layout: default
 tags: OAuth-2.0 Authorization Authentication Authorization-Code-Flow Access-Token Third-Party-Access 
 is_series: true
 series_title: "Web Security"
-series_number: 9
+series_number: 8
 ---
 
 This is most similar to the OAuth 1.0 flow. It is appropriate for server-based Client Apps, that can securely store Access Tokens from an Authentication Server.

@@ -5,7 +5,7 @@ layout: default
 tags: JWT JWE authentication authorization security session claims JSON-Web-Token 
 is_series: true
 series_title: "Web Security"
-series_number: 6
+series_number: 5
 ---
 
 JWT tokens are used for communicating information between different applications and services, with properties that enable the receiver to certify the information in the JWT is authentic and has not be tampered with.
