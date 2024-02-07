@@ -1,6 +1,6 @@
 theme: jekyll-theme-slate
 title: Solores Software
-description: A software and data engineering blog. Posts about unusual or under-documented things I've implemented, technology fundamentals that are often abstracted away by frameworks, or just topics I like to learn by writing about :)  
+description: A software and data engineering blog. Posts about unusual or under-documented things I've implemented, technology fundamentals often abstracted away by frameworks, or just topics I like to learn by writing about :)  
 
 markdown: kramdown
 
